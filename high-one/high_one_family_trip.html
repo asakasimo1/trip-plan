@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏔️ 하이원리조트 2박3일 가족여행</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #f0faf5; color: #1e293b; }
+
+  /* 히어로 */
+  .hero { background: linear-gradient(135deg, #064e3b 0%, #15803d 55%, #4ade80 100%); color: white; padding: 36px 20px 28px; text-align: center; }
+  .hero h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .hero p  { font-size: 13px; opacity: 0.88; }
+  .badge-row { display: flex; justify-content: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .badge { background: rgba(255,255,255,0.22); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; }
+
+  /* 레이아웃 */
+  .container { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+  /* 데이 카드 */
+  .day-card { background: white; border-radius: 16px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+  .day-header { padding: 14px 18px 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; justify-content: space-between; }
+  .day-header.d1 { background: linear-gradient(90deg, #15803d, #22c55e); }
+  .day-header.d2 { background: linear-gradient(90deg, #0369a1, #38bdf8); }
+  .day-header.d3 { background: linear-gradient(90deg, #b45309, #f59e0b); }
+  .day-label  { background: rgba(255,255,255,0.28); color: white; font-size: 11px; font-weight: 800; border-radius: 8px; padding: 2px 9px; white-space: nowrap; }
+  .day-title  { color: white; font-size: 12px; font-weight: 700; line-height: 1.4; flex: 1; }
+  .day-chevron { color: rgba(255,255,255,0.85); font-size: 13px; flex-shrink: 0; transition: transform 0.3s ease; margin-left: 4px; }
+  .day-header.collapsed .day-chevron { transform: rotate(-90deg); }
+  .day-body { overflow: hidden; transition: max-height 0.38s ease, opacity 0.3s ease; max-height: 3000px; opacity: 1; }
+  .day-body.collapsed { max-height: 0; opacity: 0; }
+
+  /* 호텔 배너 */
+  .hotel-banner { background: linear-gradient(90deg, #064e3b, #15803d); border-radius: 10px; padding: 8px 14px; margin: 6px 16px 4px; }
+  .hotel-banner p { color: white; font-size: 12px; font-weight: 600; }
+  .hotel-banner span { opacity: 0.75; font-weight: 400; }
+
+  /* 타임라인 */
+  .timeline { padding: 4px 0 8px; }
+  .tl-group-label { font-size: 10px; font-weight: 800; color: white; padding: 3px 14px 2px; margin: 4px 16px 0; border-radius: 6px; display: inline-block; }
+  .tl-group-label.lb-transport { background: #6366f1; }
+  .tl-group-label.lb-breakfast { background: #f59e0b; }
+  .tl-group-label.lb-lunch     { background: #22c55e; }
+  .tl-group-label.lb-dinner    { background: #ec4899; }
+  .tl-group-label.lb-activity  { background: #0ea5e9; }
+  .tl-group-label.lb-spot      { background: #64748b; }
+  .tl-group-label.lb-night     { background: #6366f1; }
+  .tl-group-label.lb-water     { background: #0369a1; }
+  .tl-group-label.lb-rest      { background: #7c3aed; }
+
+  .stop { display: flex; gap: 0; padding: 0 16px; }
+  .stop-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid #cbd5e1; background: white; margin-top: 14px; flex-shrink: 0; }
+  .dot.food   { border-color: #ea580c; }
+  .dot.cafe   { border-color: #8b5cf6; }
+  .dot.spot   { border-color: #0ea5e9; }
+  .dot.hotel  { border-color: #15803d; }
+  .dot.night  { border-color: #6366f1; }
+  .dot.water  { border-color: #0369a1; }
+  .dot.trs    { border-color: #6366f1; }
+  .dot.rest   { border-color: #7c3aed; }
+  .dot.lunch  { border-color: #22c55e; }
+  .line { width: 2px; background: #e2e8f0; flex: 1; margin-top: 2px; }
+  .stop:last-child .line { display: none; }
+
+  .stop-right { flex: 1; padding: 10px 0 10px 6px; }
+  .stop-time  { font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 2px; }
+  .stop-name  { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+  .stop-name .tag { font-size: 10px; font-weight: 700; border-radius: 6px; padding: 1px 7px; margin-left: 5px; vertical-align: middle; }
+  .tag-food   { background: #fff7ed; color: #ea580c; }
+  .tag-cafe   { background: #f5f3ff; color: #7c3aed; }
+  .tag-spot   { background: #eff6ff; color: #1d4ed8; }
+  .tag-hotel  { background: #f0fdf4; color: #15803d; }
+  .tag-night  { background: #eef2ff; color: #4338ca; }
+  .tag-water  { background: #e0f2fe; color: #0369a1; }
+  .tag-trs    { background: #eef2ff; color: #4338ca; }
+  .tag-rest   { background: #f5f3ff; color: #7c3aed; }
+  .tag-lunch  { background: #f0fdf4; color: #15803d; }
+  .tag-warn   { background: #fff1f2; color: #e11d48; }
+  .tag-tip    { background: #fefce8; color: #854d0e; }
+  .stop-desc  { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+  /* 팁 박스 */
+  .tip-box { margin: 8px 16px 14px; background: #fefce8; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 8px 12px; font-size: 12px; color: #713f12; line-height: 1.6; }
+  .tip-box strong { color: #b45309; }
+  .tip-box.blue { background: #eff6ff; border-left-color: #3b82f6; color: #1e3a8a; }
+  .tip-box.blue strong { color: #1d4ed8; }
+  .tip-box.green { background: #f0fdf4; border-left-color: #22c55e; color: #14532d; }
+  .tip-box.green strong { color: #15803d; }
+  .tip-box.red { background: #fff1f2; border-left-color: #f43f5e; color: #9f1239; }
+  .tip-box.red strong { color: #e11d48; }
+
+  /* 교통 요약 */
+  .transport-card { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1px solid #bbf7d0; }
+  .transport-card h4 { font-size: 12px; font-weight: 800; color: #15803d; margin-bottom: 8px; }
+  .transport-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; font-size: 12px; color: #374151; }
+  .transport-row .t-time  { font-weight: 700; color: #15803d; min-width: 52px; }
+  .transport-row .t-arrow { color: #86efac; }
+
+  /* 정보 그리드 */
+  .section-title { font-size: 13px; font-weight: 800; color: #475569; margin: 18px 0 8px; padding: 0 2px; letter-spacing: 0.3px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .info-card { background: white; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+  .info-card h4 { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+  .info-card p  { font-size: 12px; color: #1e293b; line-height: 1.6; font-weight: 500; }
+
+  /* 체크리스트 */
+  .checklist { background: white; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); margin-bottom: 16px; }
+  .checklist h4 { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+  .check-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; font-size: 12.5px; color: #374151; line-height: 1.5; }
+  .check-item::before { content: "□"; color: #94a3b8; flex-shrink: 0; font-size: 14px; line-height: 1.3; }
+
+  /* 비용 요약 */
+  .cost-card { background: white; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); margin-bottom: 16px; }
+  .cost-card h4 { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+  .cost-row { display: flex; justify-content: space-between; font-size: 12px; color: #374151; padding: 4px 0; border-bottom: 1px solid #f1f5f9; }
+  .cost-row:last-child { border-bottom: none; font-weight: 700; color: #15803d; font-size: 13px; padding-top: 8px; }
+  .cost-row span:last-child { color: #64748b; }
+  .cost-row:last-child span:last-child { color: #15803d; }
+
+  .footer { text-align: center; padding: 16px; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🏔️ 하이원리조트 2박3일 가족여행</h1>
+  <p>제천 · 영월 · 청령포 · 하이원 워터월드 · 정선</p>
+  <div class="badge-row">
+    <span class="badge">👨‍👩‍👧 3인 가족</span>
+    <span class="badge">🚗 자가용</span>
+    <span class="badge">👧 수아 (7세)</span>
+    <span class="badge">🏨 컨벤션 호텔 2박</span>
+    <span class="badge">☀️ 7월 29일 출발</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 교통 요약 -->
+  <p class="section-title">🚗 이동 경로 요약</p>
+  <div class="transport-card">
+    <h4>DAY 1 · 이동 (7/29 수)</h4>
+    <div class="transport-row"><span class="t-time">08:00</span><span class="t-arrow">→</span> 부천 출발 (경인고속도로 → 영동고속도로 → 중앙고속도로)</div>
+    <div class="transport-row"><span class="t-time">10:30</span><span class="t-arrow">→</span> 제천IC 하차 · 🍖 홍이갈비 점심</div>
+    <div class="transport-row"><span class="t-time">13:00</span><span class="t-arrow">→</span> 38번 국도 영월 방면 이동 (약 40분)</div>
+    <div class="transport-row"><span class="t-time">13:40</span><span class="t-arrow">→</span> ⛏️ 탄광문화촌 견학 (실내 시원함 ★)</div>
+    <div class="transport-row"><span class="t-time">15:10</span><span class="t-arrow">→</span> ⛵ 청령포 나룻배 탑승 (30~40분)</div>
+    <div class="transport-row"><span class="t-time">16:00</span><span class="t-arrow">→</span> 59번 국도 하이원 방면 (약 50분)</div>
+    <div class="transport-row"><span class="t-time">17:00</span><span class="t-arrow">→</span> 🏨 하이원 컨벤션 호텔 체크인</div>
+  </div>
+  <div class="transport-card">
+    <h4>DAY 2 · 워터월드 (7/30 목)</h4>
+    <div class="transport-row"><span class="t-time">09:40</span><span class="t-arrow">→</span> 리조트 셔틀버스 탑승 (워터월드까지 약 5분)</div>
+    <div class="transport-row"><span class="t-time">10:00</span><span class="t-arrow">→</span> 💦 하이원 워터월드 개장 입장</div>
+    <div class="transport-row"><span class="t-time">15:00</span><span class="t-arrow">→</span> 퇴장 · 샤워 · 리조트 복귀</div>
+    <div class="transport-row"><span class="t-time">18:30</span><span class="t-arrow">→</span> 고한읍 저녁식사 (차량 5분)</div>
+  </div>
+  <div class="transport-card">
+    <h4>DAY 3 · 귀가 (7/31 금)</h4>
+    <div class="transport-row"><span class="t-time">10:00</span><span class="t-arrow">→</span> 체크아웃 · 정선 방면 카페 (차량 15분)</div>
+    <div class="transport-row"><span class="t-time">11:30</span><span class="t-arrow">→</span> 정선 콧등치기 국수 점심</div>
+    <div class="transport-row"><span class="t-time">13:00</span><span class="t-arrow">→</span> 귀가 출발 (중앙고속도로 → 부천, 약 2.5시간)</div>
+    <div class="transport-row"><span class="t-time">15:30</span><span class="t-arrow">→</span> 🏠 부천 도착</div>
+  </div>
+
+  <!-- DAY 1 -->
+  <p class="section-title">DAY 1 · 7월 29일 (수)</p>
+  <div class="day-card">
+    <div class="day-header d1" onclick="toggleDay(this)">
+      <span class="day-label">Day 1</span>
+      <span class="day-title">부천 출발 → 제천 점심 → 영월 탄광·청령포 → 하이원 체크인</span>
+      <span class="day-chevron">▼</span>
+    </div>
+    <div class="day-body">
+      <div class="hotel-banner"><p>🏨 하이원 컨벤션 호텔 <span>· 1박차 (7/29~7/30)</span></p></div>
+      <div class="timeline">
+
+        <div class="tl-group-label lb-transport">🚗 출발</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">08:00 · 부천 옥길동</div>
+            <div class="stop-name">🚗 부천 출발 <span class="tag tag-trs">경인 → 영동 → 중앙고속도로</span></div>
+            <div class="stop-desc">경인고속도로 → 영동고속도로(여주JC) → 중앙고속도로(제천IC) 순서. 약 140km, 1시간 40분 예상. 출발 전 차량 에어컨 확인 · 수아 간식 준비. ☀️ 7월 여름 강한 햇볕 — 차 안 어둠막 필수.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">09:30~10:00 · 중앙고속도로 휴게소</div>
+            <div class="stop-name">☕ 문막휴게소 또는 원주휴게소 잠깐 휴식 <span class="tag tag-tip">수아 화장실</span></div>
+            <div class="stop-desc">장거리 운전 중간 스트레칭 타임. 아이스커피 한 잔 챙기고 수아 화장실 · 간식 타임.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-lunch">🍖 점심</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">10:50 · 충청북도 제천시</div>
+            <div class="stop-name">🥩 홍이갈비 <span class="tag tag-food">제천 갈비 명물</span></div>
+            <div class="stop-desc">제천 대표 갈비 맛집. 갈비찜·갈비탕이 유명하며 양이 푸짐해 가성비 최고. 수아도 맛있게 먹을 수 있는 부드러운 갈비찜 추천. 대기 있을 수 있으니 도착 전 전화 확인. ⏱ 식사 시간 약 1시간.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-spot">⛏️ 탄광문화촌 견학</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">13:00 · 강원도 영월군</div>
+            <div class="stop-name">⛏️ 영월 탄광문화촌 <span class="tag tag-spot">실내 전시 · 시원함 ★★★</span></div>
+            <div class="stop-desc">영월의 탄광 역사를 생생하게 체험할 수 있는 전시관. 탄광 내부는 연중 15도 내외로 무더운 여름에 최고의 피서지! 수아가 신기해할 광부 복장 체험, 모형 갱도 전시. 입장료 성인 5,000원 · 어린이 3,000원. ⏱ 관람 약 1시간~1시간 30분.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">14:30 · 이동 중</div>
+            <div class="stop-name">🍦 근처 편의점 아이스크림 타임 <span class="tag tag-tip">수아 보상</span></div>
+            <div class="stop-desc">탄광 견학 잘 따라온 수아에게 아이스크림 한 개 포상. 청령포까지 차량 10분 이동.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-spot">⛵ 청령포 견학</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">15:00 · 강원도 영월군 남면</div>
+            <div class="stop-name">⛵ 청령포 — 단종 유배지 <span class="tag tag-spot">배 타기 체험</span></div>
+            <div class="stop-desc">삼면이 서강으로 둘러싸인 섬. 나룻배(약 2분)를 타고 건너는 게 수아에게 특별한 경험! 단종이 유배되었던 역사적 장소로 소나무 숲이 아름다움. 입장료+나룻배: 성인 5,000원 · 어린이 2,500원. ⚠️ 더운 날씨에 모자·양산 필수. ⏱ 30~40분 짧게.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-transport">🚗 하이원 이동</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">16:00 · 영월 → 고한</div>
+            <div class="stop-name">🚗 하이원 리조트 이동 <span class="tag tag-trs">59번 국도 · 약 50분</span></div>
+            <div class="stop-desc">영월에서 정선 고한읍 방면 59번 국도 이용. 산길이지만 드라이브 코스 아름다움. 수아 차에서 잠깐 낮잠 가능.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-spot">🏨 체크인</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">17:00 · 강원도 정선군 고한읍</div>
+            <div class="stop-name">🏨 하이원 컨벤션 호텔 체크인 <span class="tag tag-hotel">베이스캠프</span></div>
+            <div class="stop-desc">하이원 리조트 내 가장 편의시설 가깝고 깔끔한 컨벤션 호텔. 체크인 후 수아 먼저 샤워 · 짐 정리. 리조트 내 셔틀버스·편의점 위치 파악. 하영님 욕실 확인(깔끔함 중요 ★).</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">17:30~18:30 · 리조트 내</div>
+            <div class="stop-name">🗺️ 리조트 탐험 <span class="tag tag-spot">수아와 함께</span></div>
+            <div class="stop-desc">리조트 내부 산책 — 워터월드 위치 확인, 매표소 확인, 셔틀버스 시간표 메모. 수아에게 "내일 저기서 물놀이 할거야!" 예고편 제공으로 기대감 UP.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-dinner">🍽️ 저녁</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot food"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">19:00 · 고한읍 (차량 5분)</div>
+            <div class="stop-name">🍗 고한 황기닭볶음탕 <span class="tag tag-food">정선 향토음식</span></div>
+            <div class="stop-desc">정선 특산물 황기를 넣어 끓인 닭볶음탕. 리조트 내 식당보다 가성비 3배. 고한읍 내 현지 식당 1~2만원대. 수아도 먹을 수 있는 닭고기 메뉴. 대안: 황태구이 전문점 — 정선 산간 지역 특산 황태.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-night">🌙 야경</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot night"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">20:30 · 리조트 내</div>
+            <div class="stop-name">🌃 하이원 야경 산책 <span class="tag tag-night">선선한 저녁</span></div>
+            <div class="stop-desc">해발 1,100m 리조트는 낮 더위와 달리 밤에는 서늘함. 리조트 조명 아래 가족 산책. 편의점 아이스크림 · 수아 사진 찰칵. 21:30 취침 (내일 워터월드 대비 체력 충전).</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="tip-box"><strong>💡 Day 1 팁</strong> 청령포는 오전보다 오후가 혼잡. 도착 전 나룻배 운행 시간 확인(보통 18:00 종료). 탄광문화촌 출발 전 청령포 매표소 마감 시간 체크!</div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <p class="section-title">DAY 2 · 7월 30일 (목)</p>
+  <div class="day-card">
+    <div class="day-header d2" onclick="toggleDay(this)">
+      <span class="day-label">Day 2</span>
+      <span class="day-title">하이원 워터월드 하루 종일 🌊 → 고한읍 황태구이 저녁</span>
+      <span class="day-chevron">▼</span>
+    </div>
+    <div class="day-body">
+      <div class="hotel-banner"><p>🏨 하이원 컨벤션 호텔 <span>· 2박차 (7/30~7/31)</span></p></div>
+      <div class="timeline">
+
+        <div class="tl-group-label lb-breakfast">🍳 조식</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot food"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">08:00 · 호텔 내</div>
+            <div class="stop-name">🍳 호텔 조식 뷔페 <span class="tag tag-food">에너지 충전</span></div>
+            <div class="stop-desc">워터월드 하루 종일 버티려면 든든한 아침 필수. 뷔페 가격이 부담되면 호텔 편의점 + 방 안에서 컵라면 조합도 현실적 선택(가성비 ★). 수아에게 과일·요거트 챙겨주기.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-water">💦 하이원 워터월드</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot water"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">09:30 · 리조트 내</div>
+            <div class="stop-name">🚌 셔틀버스 탑승 → 워터월드 이동 <span class="tag tag-water">도보 or 버스 5분</span></div>
+            <div class="stop-desc">준비물 챙기기: 래시가드, 수영복, 방수 선크림, 아쿠아 샌들, 튜브(현장 대여 가능), 여벌 속옷. 매표소 도착 후 물품 보관함 먼저 확인.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot water"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">10:00 개장 · 워터월드 내</div>
+            <div class="stop-name">💦 파도풀 · 유아풀 · 슬라이드 <span class="tag tag-water">수아 메인 이벤트</span></div>
+            <div class="stop-desc">
+              <strong>수아 추천 구역:</strong> 유아 전용 얕은 물 놀이존 (안전 ★★★) · 파도풀 가장자리 · 미니 슬라이드.<br>
+              ⚠️ 심실중격결손 수술 이력 — 격렬한 대형 슬라이드는 다음에. 얕은 물에서 오래 노는 것이 베스트.<br>
+              아빠·엄마 교대로 수아 봐주며 부모도 파도풀 즐기기 가능.<br>
+              ☀️ 2시간마다 선크림 재도포 필수. 비염 있으니 코에 물 들어가지 않게 코마개 준비.
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-lunch">🍱 점심</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">12:30 · 워터월드 내 or 퇴장 후</div>
+            <div class="stop-name">🍜 워터월드 내 식당 or 컵라면 존 <span class="tag tag-tip">가성비 전략</span></div>
+            <div class="stop-desc">워터월드 내 식당은 가격이 비쌈(1.5~2배). 가성비 전략: 출발 전 편의점 김밥·삼각김밥 챙겨서 워터파크 내 피크닉 테이블에서. 또는 잠깐 퇴장 후 고한읍 식당 이용(재입장 가능 여부 사전 확인). 수아 수분 섭취 잊지 말 것.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-water">💦 오후 물놀이</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot water"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">13:30~15:00 · 워터월드</div>
+            <div class="stop-name">🏄 오후 물놀이 계속 <span class="tag tag-water">파도풀 황금시간</span></div>
+            <div class="stop-desc">오후 1~3시가 파도풀 가장 재미있는 시간대. 수아 에너지 남아있으면 워터슬라이드 1~2개 도전 (낮은 것부터). 하영님은 워터파크 내 선베드에서 잠깐 휴식도 OK.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-rest">😌 휴식</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot rest"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">15:00~15:30 · 워터월드 탈의실</div>
+            <div class="stop-name">🚿 퇴장 · 샤워 · 리조트 복귀 <span class="tag tag-rest">체력 회복</span></div>
+            <div class="stop-desc">탈의실에서 깨끗이 샤워 후 리조트로 복귀. 수아 머리 드라이기로 잘 말려주기(비염 예방). 객실 돌아와 에어컨 틀고 1시간 낮잠 or 휴식.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot rest"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">16:00~17:30 · 리조트 내</div>
+            <div class="stop-name">🎳 리조트 실내 볼링장 or 수아 그림 타임 <span class="tag tag-rest">실내 활동</span></div>
+            <div class="stop-desc">
+              <strong>볼링장:</strong> 리조트 내 볼링장 운영(범퍼레인 있어 수아도 가능). 아빠·수아 내기 볼링 한 판.<br>
+              <strong>그림 타임:</strong> 수아가 그림 좋아하니 스케치북+크레파스 챙겨와서 호텔 방에서 오늘 탄광·청령포 그림 그리기. 하영님 편안한 휴식 시간.<br>
+              <strong>아케이드:</strong> 리조트 내 게임 코너에서 수아와 클립 인형 뽑기.
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-dinner">🍽️ 저녁</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot food"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">18:30 · 고한읍 (차량 5분)</div>
+            <div class="stop-name">🐟 고한 황태구이 or 곤드레 돌솥밥 <span class="tag tag-food">현지 맛집</span></div>
+            <div class="stop-desc">
+              <strong>황태구이:</strong> 정선·고한 특산. 양념 황태구이 + 황태국 조합. 담백하고 수아도 잘 먹음.<br>
+              <strong>곤드레밥:</strong> 강원도 전통 나물 비빔밥. 건강하고 가성비 최고.<br>
+              리조트 내 레스토랑 대비 절반 가격으로 훨씬 맛있음.
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-night">🌙 저녁</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot night"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">20:00 · 리조트 내</div>
+            <div class="stop-name">⭐ 리조트 야경 + 편의점 간식 타임 <span class="tag tag-night">별빛 아래</span></div>
+            <div class="stop-desc">해발 1,100m에서 보는 별이 도심과 달리 쏟아짐. 수아에게 별 보여주기. 편의점 아이스크림 하나씩 들고 리조트 야외 테라스에서 가족 사진. 아이돌댄스 좋아하는 수아에게 유튜브 아이돌 영상 함께 보기.</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="tip-box blue"><strong>💡 워터월드 절약 팁</strong> 평일 오전(10시 개장) 입장하면 오후보다 덜 붐빔. 하이원 리조트 숙박 패키지에 워터월드 할인권 포함 여부 체크인 시 확인할 것. 성인 38,000원 / 소인(12세 미만) 30,000원 수준.</div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <p class="section-title">DAY 3 · 7월 31일 (금)</p>
+  <div class="day-card">
+    <div class="day-header d3" onclick="toggleDay(this)">
+      <span class="day-label">Day 3</span>
+      <span class="day-title">정선 감성카페 → 콧등치기 국수 점심 → 부천 귀가 🏠</span>
+      <span class="day-chevron">▼</span>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+
+        <div class="tl-group-label lb-breakfast">🍳 조식 · 체크아웃</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot food"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">08:00 · 호텔 내</div>
+            <div class="stop-name">🍳 간단 조식 후 체크아웃 준비 <span class="tag tag-tip">짐 정리</span></div>
+            <div class="stop-desc">귀가일은 짐 싸는 데 생각보다 시간이 걸림. 7시 반 기상 → 8시 식사 → 9시 짐 완성 목표. 세면도구·충전기·수아 장난감 빠짐없이 확인. 하영님 욕실 마지막 청소 확인.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">10:00 · 호텔 프런트</div>
+            <div class="stop-name">🏨 체크아웃 <span class="tag tag-hotel">짐 차에 싣기</span></div>
+            <div class="stop-desc">레이트 체크아웃 필요 시 전날 프런트 문의 (가능 시 11시까지 연장). 차에 짐 먼저 싣고 가볍게 리조트 내부 마지막 사진 찰칵.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-cafe">☕ 카페</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot cafe"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">10:30 · 정선 방면 (차량 15분)</div>
+            <div class="stop-name">☕ 정선 감성 카페 <span class="tag tag-cafe">산 뷰 카페</span></div>
+            <div class="stop-desc">
+              <strong>추천 1: 아리힐스 리조트 카페</strong> — 정선 아우라지 방면. 탁 트인 산 뷰 + 에어컨 인테리어.<br>
+              <strong>추천 2: 고한읍 내 소규모 로컬 카페</strong> — 최근 감성 카페 많이 생김. 커피 한 잔 + 수아 딸기에이드.<br>
+              하영님 마음에 드는 인테리어 카페 발견하면 사진 충분히 찍기. ⏱ 약 40분.
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-lunch">🍜 점심</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
+          <div class="stop-time">11:30 · 강원도 정선읍</div>
+          <div class="stop-right">
+            <div class="stop-name">🍜 정선 콧등치기 국수 <span class="tag tag-food">정선 대표 향토음식</span></span></div>
+            <div class="stop-desc">콧등치기 국수는 정선 5일장의 명물. 메밀로 만든 국수를 후루룩 먹다가 콧등을 치게 된다는 뜻. 시원하고 담백한 국물이 여름에 딱! 정선읍 5일장 주변 맛집 多. 가격 7,000~9,000원대로 가성비 최고. 수아도 국수는 잘 먹음.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">12:30 · 정선읍 주변</div>
+            <div class="stop-name">🎲 정선 기념품 쇼핑 (선택) <span class="tag tag-tip">10~15분</span></div>
+            <div class="stop-desc">정선 특산품: 황기, 곤드레, 옥수수 엿, 황태. 귀가 선물로 소량 구매. 오래 머물지 말고 귀가 시간 고려해서 가볍게.</div>
+          </div>
+        </div>
+
+        <div class="tl-group-label lb-transport">🚗 귀가</div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">13:00 · 정선 출발</div>
+            <div class="stop-name">🚗 부천 귀가 출발 <span class="tag tag-trs">중앙고속도로 → 영동 → 경인</span></div>
+            <div class="stop-desc">정선 → 중앙고속도로(제천JC) → 영동고속도로(여주JC) → 경인고속도로 → 부천 옥길동. 약 2시간 30분 ~ 3시간 예상. 수아 차에서 낮잠 or 유튜브로 조용히 귀가.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">14:00 · 이동 중 고속도로 휴게소</div>
+            <div class="stop-name">☕ 귀가 중 휴게소 커피 한 잔 <span class="tag tag-tip">아빠 졸음 방지</span></div>
+            <div class="stop-desc">장거리 운전 중 아빠 피로 주의. 원주휴게소 또는 여주휴게소 들러서 아이스커피 + 수아 화장실. 프리미엄 아이스크림 하나 더 사주기.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-left"><div class="dot hotel"></div></div>
+          <div class="stop-right">
+            <div class="stop-time">15:30~16:00 · 부천 옥길동</div>
+            <div class="stop-name">🏠 귀가! <span class="tag tag-hotel">여행 완료</span></div>
+            <div class="stop-desc">2박 3일 수고하셨어요! 수아 샤워 → 저녁은 배달 시켜서 편하게 🍕. 여행 사진 구글포토 업로드 잊지 말기.</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="tip-box green"><strong>💡 귀가 팁</strong> 금요일 오후 귀가는 서울 방면 정체 가능. 13시 출발이 이상적. 15시 이후 출발하면 영동고속도로 여주 구간 정체 심함.</div>
+    </div>
+  </div>
+
+  <!-- 준비물 체크리스트 -->
+  <p class="section-title">🎒 준비물 체크리스트</p>
+  <div class="checklist">
+    <h4>☀️ 여름 필수</h4>
+    <div class="check-item">래시가드 (수아 + 어른) · 수영복</div>
+    <div class="check-item">방수 선크림 SPF50+ (워터파크용)</div>
+    <div class="check-item">모자 · 양산 (청령포 야외 구간용)</div>
+    <div class="check-item">쿨토시 · 얼음팩 (이동 중 차량 내)</div>
+    <div class="check-item">아쿠아 샌들 (수아 발에 맞는 것)</div>
+    <div class="check-item">수아 코마개 (비염 + 워터파크)</div>
+  </div>
+  <div class="checklist">
+    <h4>🎨 수아 전용</h4>
+    <div class="check-item">스케치북 + 크레파스 (그림 그리기)</div>
+    <div class="check-item">수아 좋아하는 간식 (젤리·과자)</div>
+    <div class="check-item">작은 튜브 or 완장 (워터파크)</div>
+    <div class="check-item">차 안 멀미약 (산길 많음)</div>
+    <div class="check-item">수아 여벌 옷 3~4벌</div>
+  </div>
+  <div class="checklist">
+    <h4>🏨 리조트 필수</h4>
+    <div class="check-item">하이원 리조트 예약 확인증</div>
+    <div class="check-item">워터월드 티켓 사전 예매 (현장보다 저렴)</div>
+    <div class="check-item">여분 현금 (현지 식당 카드 안 될 때)</div>
+    <div class="check-item">충전기 + 보조배터리</div>
+    <div class="check-item">세면도구 (하영님 선호 제품)</div>
+  </div>
+
+  <!-- 예상 비용 -->
+  <p class="section-title">💰 예상 비용 (3인 기준)</p>
+  <div class="cost-card">
+    <h4>항목별 예상 지출</h4>
+    <div class="cost-row"><span>🏨 숙박 (컨벤션호텔 2박)</span><span>약 20~30만원</span></div>
+    <div class="cost-row"><span>⛽ 유류비 (왕복 약 320km)</span><span>약 4~5만원</span></div>
+    <div class="cost-row"><span>💦 워터월드 입장 (성인2+소인1)</span><span>약 10~11만원</span></div>
+    <div class="cost-row"><span>🍖 식사 3일 (점심·저녁 외식)</span><span>약 12~15만원</span></div>
+    <div class="cost-row"><span>🎫 탄광문화촌+청령포 입장</span><span>약 1.5만원</span></div>
+    <div class="cost-row"><span>🍦 간식·편의점</span><span>약 3~4만원</span></div>
+    <div class="cost-row"><span>💳 총 예상 비용</span><span>약 51~67만원</span></div>
+  </div>
+
+  <!-- 가족 맞춤 팁 -->
+  <p class="section-title">👨‍👩‍👧 우리 가족 맞춤 TIP</p>
+<div class="tip-box"><strong>💡 아빠 (현석) 스타일</strong> 운전·계획 담당. 가성비 식당 선택 탁월. 고한읍 현지 식당 가면 리조트 내 뷔페보다 훨씬 만족도 높음. 성격 급하니 출발 전날 짐 미리 싸두기 추천.</div>
+  <div class="tip-box blue"><strong>💡 엄마 (하영) 스타일</strong> 꼼꼼함·깔끔함 최우선. 컨벤션 호텔 체크인 시 룸 상태 꼼꼼히 확인. 욕실 청결 이슈 있으면 즉시 프런트 요청. 여행 사진 예쁘게 찍을 포토 스팟: 청령포 소나무 숲, 리조트 야경, 워터월드 파도풀.</div>
+  <div class="tip-box green"><strong>🎵 수아 만족 포인트</strong> 아이돌댄스 좋아하는 수아를 위해 이동 중 차 안에서 최애 아이돌 음악 틀어주기. 탄광에서 "광부 놀이", 청령포에서 "나룻배 선장 놀이", 워터파크에서 "수영 선수 놀이" — 역할 놀이로 수아 여행 만족도 UP!</div>
+
+  <div class="footer">🏔️ 2026 하이원 가족여행 · 현석·하영·수아 세 가족 ❤️<br>즐거운 여행 되세요!</div>
+</div>
+
+<script>
+function toggleDay(header) {
+  header.classList.toggle('collapsed');
+  const body = header.nextElementSibling;
+  body.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>
