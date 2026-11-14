@@ -36,15 +36,15 @@
 <div class="header">
   <a class="back" href="../fukuoka_family_trip.html">← 일정표로</a>
   <h1>🍜 벳푸·후쿠오카 구글 지도</h1>
-  <p>11/29 – 12/4 · 날짜 탭 → 그날 동선 · 장소를 누르면 그 위치로 이동</p>
+  <p>11/29 – 12/4 · 날짜 탭 → 그날 장소 · 장소를 누르면 그 위치로 이동</p>
 </div>
 <div class="tabs" id="tabs"></div>
 <div class="wrap">
   <div class="mapbox">
-    <iframe id="frame" title="구글 지도" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    <iframe id="frame" title="구글 지도" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
     <div class="mapbar">
       <div class="cur" id="cur"></div>
-      <button type="button" id="routeBtn">🛣️ 하루 동선 보기</button>
+      <a id="routeBtn" href="#" target="_blank" rel="noopener">🛣️ 하루 동선(구글맵)</a>
       <a id="openApp" href="#" target="_blank" rel="noopener">구글맵 앱으로 열기</a>
     </div>
   </div>
@@ -73,14 +73,14 @@
     document.getElementById('openApp').href = 'https://www.google.com/maps/search/?api=1&query=' + enc(Q(l));
     mark();
   }
-  function showRoute() {
-    var s = routeStops(day);
-    selId = null;
-    if (s.length < 2) { if (s[0]) showPlace(s[0]); else if (dayItems(day)[0]) showPlace(dayItems(day)[0]); return; }
-    frame.src = 'https://www.google.com/maps?saddr=' + enc(Q(s[0])) + '&daddr=' + s.slice(1).map(function (l) { return enc(Q(l)); }).join('+to:') + '&hl=ko&output=embed';
-    cur.textContent = '🛣️ ' + DAY_COLORS[day].label + ' 동선 (' + s.length + '곳)';
-    document.getElementById('openApp').href = 'https://www.google.com/maps/dir/' + s.map(function (l) { return enc(Q(l)); }).join('/') + '/?hl=ko';
-    mark();
+  function setRouteLink() {
+    var s = routeStops(day), rb = document.getElementById('routeBtn');
+    if (s.length >= 2) { rb.href = 'https://www.google.com/maps/dir/' + s.map(function (l) { return enc(Q(l)); }).join('/') + '/?hl=ko'; rb.style.display = ''; }
+    else rb.style.display = 'none';
+  }
+  function showFirst() {
+    setRouteLink();
+    var it = dayItems(day); if (it[0]) showPlace(it[0]);
   }
   function mark() {
     document.querySelectorAll('.place').forEach(function (p) { p.classList.toggle('sel', p.getAttribute('data-id') === selId); });
@@ -105,13 +105,12 @@
     Object.keys(names).forEach(function (k) {
       var b = el('button', 'tab' + (+k === day ? ' on' : ''), names[k]); b.type = 'button';
       b.style.setProperty('--c', DAY_COLORS[k].color);
-      b.addEventListener('click', function () { day = +k; renderTabs(); renderList(); if (day === 7) showPlace(dayItems(7)[0]); else showRoute(); });
+      b.addEventListener('click', function () { day = +k; renderTabs(); renderList(); showFirst(); });
       t.appendChild(b);
     });
   }
-  document.getElementById('routeBtn').addEventListener('click', function () { if (day === 7) return; showRoute(); });
   var m = location.hash.match(/day=(\d)/); if (m && DAY_COLORS[m[1]]) day = +m[1];
-  renderTabs(); renderList(); if (day === 7) showPlace(dayItems(7)[0]); else showRoute();
+  renderTabs(); renderList(); showFirst();
 })();
 </script>
 </body>
