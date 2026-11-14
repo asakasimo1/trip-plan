@@ -21,6 +21,11 @@
   .item .name { font-size: 14px; font-weight: 700; color: #1e293b; }
   .item .meta { font-size: 12px; color: #64748b; margin-top: 2px; line-height: 1.5; }
   .item.done .name { text-decoration: line-through; color: #94a3b8; }
+  .item .body { flex: 1; min-width: 0; }
+  .item .price { font-size: 12.5px; font-weight: 800; color: #1d4ed8; margin-top: 2px; }
+  .thumb { flex-shrink: 0; width: 112px; height: 68px; border-radius: 10px; overflow: hidden; background: #f1f5f9; display: block; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .item.done .thumb { opacity: .45; }
   .chip { display: inline-block; font-size: 10.5px; font-weight: 700; border-radius: 6px; padding: 1px 7px; margin-left: 6px; background: #eef2ff; color: #4338ca; vertical-align: middle; }
   .chip.local { background: #fff7ed; color: #ea580c; }
   .empty { font-size: 13px; color: #94a3b8; padding: 8px 0; line-height: 1.6; }
@@ -82,12 +87,19 @@
     var r = el('div', 'item' + (store.done[id] ? ' done' : ''));
     var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!store.done[id];
     cb.addEventListener('change', function () { store.done[id] = cb.checked; if (!cb.checked) delete store.done[id]; save(); render(); });
-    var box = el('div'); var nm = el('div', 'name', it.name);
+    var box = el('div', 'body'); var nm = el('div', 'name', it.name);
     if (isLocal) nm.appendChild(el('span', 'chip local', '이 기기'));
     box.appendChild(nm);
+    if (it.price) box.appendChild(el('div', 'price', it.price));
     var meta = [it.where && ('📍 ' + it.where), it.qty && ('수량 ' + it.qty), it.for && ('👤 ' + it.for), it.note].filter(Boolean).join(' · ');
     if (meta) box.appendChild(el('div', 'meta', meta));
-    r.appendChild(cb); r.appendChild(box);
+    r.appendChild(cb);
+    if (it.photo) {
+      var a = el('a', 'thumb'); a.href = it.photo; a.target = '_blank'; a.rel = 'noopener';
+      var im = el('img'); im.src = it.photo; im.alt = it.name; im.loading = 'lazy';
+      a.appendChild(im); r.appendChild(a);
+    }
+    r.appendChild(box);
     if (isLocal) {
       var d = el('button', 'del', '✕'); d.type = 'button'; d.title = '삭제';
       d.addEventListener('click', function () {

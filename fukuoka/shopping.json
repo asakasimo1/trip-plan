@@ -1,5 +1,67 @@
 {
   "updated": "2026-11-14",
-  "note": "항목 추가는 Claude에게 '쇼핑목록에 ○○ 추가'라고 말하면 이 파일에 반영됩니다. 체크 표시는 각자 기기에만 저장됩니다.",
-  "items": []
+  "note": "항목 추가는 Claude에게 '쇼핑목록에 ○○ 추가'라고 말하면 이 파일에 반영됩니다. 체크 표시는 각자 기기에만 저장됩니다. 2026-11-14 항목 8개는 TV 방송 화면 사진에서 옮긴 것으로, 가격은 방송에 표시된 '약' 환산가입니다.",
+  "items": [
+    {
+      "id": "p01",
+      "name": "오하요 브륄레",
+      "price": "약 ¥348 (≈3,300원)",
+      "photo": "shopping-photos/ohayo-brulee.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)"
+    },
+    {
+      "id": "p02",
+      "name": "몽고탄멘 나카모토 컵라면",
+      "price": "약 ¥240 (≈2,300원)",
+      "photo": "shopping-photos/mongol-tanmen-nakamoto.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)",
+      "note": "닛신 × 세븐프리미엄 蒙古タンメン中本 辛旨味噌 (패키지 표기)"
+    },
+    {
+      "id": "p03",
+      "name": "JONETZ 튀김스낵",
+      "price": "약 ¥699 (≈6,600원)",
+      "photo": "shopping-photos/jonetz-tempura-snack.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)"
+    },
+    {
+      "id": "p04",
+      "name": "JONETZ 간장계란밥 풍 양념장",
+      "price": "약 ¥599 (≈5,700원)",
+      "photo": "shopping-photos/jonetz-tkg-sauce.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)"
+    },
+    {
+      "id": "p05",
+      "name": "JONETZ 대용량! 먹을 수 있는 라유",
+      "price": "약 ¥499 (≈4,700원)",
+      "photo": "shopping-photos/jonetz-chili-oil.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)",
+      "note": "超特大 255g (패키지 표기)"
+    },
+    {
+      "id": "p06",
+      "name": "밥이 안 붙는 주걱",
+      "price": "약 ¥480 (≈4,500원)",
+      "photo": "shopping-photos/rice-scoop.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)",
+      "note": "marna 極 しゃもじ (패키지 표기)"
+    },
+    {
+      "id": "p07",
+      "name": "시미토리 얼룩제거제",
+      "price": "약 ¥498 (≈4,680원)",
+      "photo": "shopping-photos/shimitori-stain-remover.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)",
+      "note": "라이온 シミとり レスキュー (패키지 표기)"
+    },
+    {
+      "id": "p08",
+      "name": "고바야시제약 쇼슈겐 변기 방향액",
+      "price": "약 ¥328 (≈3,100원)",
+      "photo": "shopping-photos/shoshugen-toilet-deodorizer.jpg",
+      "source": "TV 방송 화면 사진 (2026-11-14, 구글 포토)",
+      "note": "1滴消臭元 스위트로즈 향 (패키지 표기)"
+    }
+  ]
 }

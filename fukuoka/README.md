@@ -9,7 +9,7 @@
 |------|------|
 | `fukuoka_family_trip.html` | 일정표 (6일, 하루 동선을 구글맵으로 여는 버튼, 맛집 후보 12곳, 출발 전 체크) |
 | `map/map.html`, `map/locations.js` | 일정 지도 (Leaflet+OSM). 장소 데이터는 `locations.js` 한 곳. 주황 **맛집 후보** 탭 = day 7 |
-| `shopping.html`, `shopping.json` | 쇼핑목록. 항목은 `shopping.json`의 `items`에 추가 |
+| `shopping.html`, `shopping.json`, `shopping-photos/` | 쇼핑목록(사진 포함). 항목은 `shopping.json`의 `items`에 추가 |
 | `fukuoka_google_mymaps.csv` | 구글 내 지도(My Maps) 가져오기용 (아래) |
 
 ## 🍽️ 맛집은 동선에 넣지 않는다
@@ -17,7 +17,7 @@
 후보를 바꾸려면 데이터 원본 한 곳(`locations.js`의 `pick_*` 항목)과 일정표의 후보 카드를 함께 고친다.
 
 ## 🛍️ 쇼핑목록 추가
-`shopping.json`의 `items`에 `{ "id": "1", "name": "…", "where": "…", "qty": "…", "for": "…", "note": "…" }` 형식으로 추가(`name`만 필수). 체크 표시와 화면에서 직접 적은 항목은 각자 기기(브라우저)에만 저장된다.
+`shopping.json`의 `items`에 `{ "id": "1", "name": "…", "where": "…", "qty": "…", "for": "…", "note": "…" }` 형식으로 추가(`name`만 필수, 가격은 `price`, 사진은 `photo`에 `shopping-photos/…jpg` 경로). 사진은 올리기 전에 위치·촬영정보를 지우고 가로 820px 안팎으로 줄인다. 체크 표시와 화면에서 직접 적은 항목은 각자 기기(브라우저)에만 저장된다.
 
 ## 🗺️ 구글 내 지도(My Maps)로 가져오기
 1. https://www.google.com/mymaps → **새 지도 만들기** → **가져오기**에서 `fukuoka_google_mymaps.csv` 업로드
