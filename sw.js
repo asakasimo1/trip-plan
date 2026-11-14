@@ -1,15 +1,15 @@
 // 가족 여행 플랜 — 오프라인용 서비스 워커
 // 전략: 같은 사이트 파일은 "네트워크 우선, 실패하면 캐시" → 온라인일 땐 늘 최신, 해외 데이터 없이도 열림.
 // 구글 지도·OSM 타일 등 다른 사이트 자원은 건드리지 않는다(오프라인에선 지도 화면이 비는 게 정상).
-const VERSION = 'v3-2026-11-14';
+const VERSION = 'v4-2026-11-14';
 const CORE = [
   "./",
   "./index.html",
   "./trips.json",
   "./manifest.webmanifest",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./icons/apple-touch-icon.png",
+  "./icons/icon-192-v2.png",
+  "./icons/icon-512-v2.png",
+  "./icons/apple-touch-icon-v2.png",
   "./fukuoka/fukuoka_family_trip.html",
   "./fukuoka/shopping.html",
   "./fukuoka/shopping.json",

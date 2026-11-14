@@ -1,6 +1,6 @@
 {
-  "name": "❤️수아네 가족여행❤️",
-  "short_name": "❤️수아네 가족여행❤️",
+  "name": "💕수아네 가족여행💕",
+  "short_name": "💕수아네 가족여행💕",
   "description": "가족 여행 일정표·지도·쇼핑목록 (오프라인 열람 가능)",
   "lang": "ko",
   "start_url": "/trip-plan/?source=pwa",
@@ -11,22 +11,23 @@
   "theme_color": "#1e3a5f",
   "icons": [
     {
-      "src": "/trip-plan/icons/icon-192.png",
+      "src": "/trip-plan/icons/icon-192-v2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/trip-plan/icons/icon-512.png",
+      "src": "/trip-plan/icons/icon-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/trip-plan/icons/icon-maskable-512.png",
+      "src": "/trip-plan/icons/icon-maskable-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "id": "/trip-plan/"
 }
