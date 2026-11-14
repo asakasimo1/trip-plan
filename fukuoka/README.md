@@ -20,6 +20,7 @@
 `shopping.json`의 `items`에 `{ "id": "1", "name": "…", "where": "…", "qty": "…", "for": "…", "note": "…" }` 형식으로 추가(`name`만 필수, 가격은 `price`, 사진은 `photo`에 `shopping-photos/…jpg` 경로). 사진은 올리기 전에 위치·촬영정보를 지우고 가로 820px 안팎으로 줄인다. 체크 표시와 화면에서 직접 적은 항목은 각자 기기(브라우저)에만 저장된다.
 
 ## 🗺️ 구글 내 지도(My Maps)로 가져오기
+※ 이미 만들어 공유함: https://www.google.com/maps/d/viewer?mid=15WOosCb-NuJpVjpzObgiSXqQoXHo4g8 (일정표·지도 페이지의 「📌 내 지도」 버튼). 일정이 바뀌면 이 지도의 항목도 함께 고쳐야 한다.
 1. https://www.google.com/mymaps → **새 지도 만들기** → **가져오기**에서 `fukuoka_google_mymaps.csv` 업로드
 2. 위치 열은 **Search**(장소명 검색) 또는 Latitude/Longitude 중 선택, 마커 제목은 **Name**
 3. "스타일 지정 기준"을 **Day**로 하면 날짜별로 색이 나뉜다. 구글 지도 앱에서 "저장됨 → 지도"로 볼 수 있다.
