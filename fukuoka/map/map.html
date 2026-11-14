@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍜 벳푸·후쿠오카 가족여행 지도</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #f0f4f8; }
+
+  /* 헤더 */
+  .header {
+    background: linear-gradient(135deg, #1a73c8, #0ea5e9);
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 200;
+    position: relative;
+  }
+  .header h1 { font-size: 16px; font-weight: 800; }
+  .header p  { font-size: 12px; opacity: 0.85; }
+
+  /* 사이드바 토글 버튼 */
+  .sidebar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  /* 레이아웃 */
+  .layout { display: flex; height: calc(100vh - 56px); position: relative; }
+
+  /* 사이드바 */
+  .sidebar {
+    width: 300px;
+    min-width: 300px;
+    background: white;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.07);
+    z-index: 1100;
+    transition: transform 0.3s ease;
+  }
+
+  /* 모바일 오버레이 */
+  .sidebar-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1050;
+  }
+  .sidebar-overlay.visible { display: block; }
+
+  /* 모바일 */
+  @media (max-width: 640px) {
+    .sidebar-toggle { display: flex; }
+    .sidebar {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      transform: translateX(-100%);
+      z-index: 1100;
+    }
+    .sidebar.open { transform: translateX(0); }
+  }
+
+  /* Day 탭 */
+  .day-tabs {
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 8px;
+    gap: 4px;
+    background: #f8fafc;
+  }
+  .day-tab {
+    padding: 10px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    color: #64748b;
+    transition: all 0.2s;
+  }
+  .day-tab.active { color: #1e293b; border-bottom-color: var(--day-color); }
+  .day-tab:hover  { color: #1e293b; }
+
+  /* 장소 리스트 */
+  .place-list { padding: 8px 0; }
+  .place-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .place-item:hover { background: #f8fafc; }
+  .place-item.active { background: #eff6ff; }
+  .place-top { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+  .place-icon { font-size: 14px; }
+  .place-name { font-size: 13px; font-weight: 700; color: #1e293b; }
+  .place-namejp { font-size: 11px; color: #94a3b8; }
+  .place-desc { font-size: 12px; color: #64748b; line-height: 1.5; margin-top: 2px; }
+  .place-tip {
+    font-size: 11px; color: #92400e;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 4px 8px;
+    margin-top: 5px;
+    border-radius: 0 4px 4px 0;
+  }
+  .place-links { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+  .link-btn {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px;
+    text-decoration: none; cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .link-btn:hover { opacity: 0.75; }
+  .link-btn-map  { background: #eff6ff; color: #1d4ed8; }
+  .link-btn-web  { background: #f0fdf4; color: #16a34a; }
+  .order-badge {
+    background: var(--day-color, #94a3b8);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* 지도 */
+  #map-wrap { flex: 1; position: relative; }
+  #map { width: 100%; height: 100%; }
+
+  /* 범례 */
+  .legend {
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    font-size: 12px;
+    z-index: 500;
+  }
+  .legend-title { font-weight: 700; margin-bottom: 6px; color: #1e293b; }
+  .legend-item { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; color: #374151; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Leaflet 팝업 커스텀 */
+  .leaflet-popup-content-wrapper {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+    padding: 0 !important;
+  }
+  .leaflet-popup-content { margin: 12px 14px !important; min-width: 200px; }
+  .leaflet-container a { color: inherit; }
+
+  /* 모바일 바텀 시트 */
+  .bottom-sheet {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+    z-index: 1001;
+    max-height: 65vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  .bottom-sheet.open { transform: translateY(0); }
+  .bottom-sheet-handle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px 8px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .bottom-sheet-handle-bar {
+    width: 36px; height: 4px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    margin: 0 auto 0;
+  }
+  .bottom-sheet-close {
+    background: none; border: none;
+    font-size: 20px; color: #94a3b8;
+    cursor: pointer; line-height: 1;
+    padding: 0 0 0 auto;
+  }
+  .bottom-sheet-body { padding: 12px 16px 24px; }
+  .bs-name { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 2px; }
+  .bs-namejp { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  .bs-desc { font-size: 13px; color: #374151; line-height: 1.6; }
+  .bs-tip {
+    font-size: 12px; color: #92400e;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 6px 10px;
+    margin-top: 8px;
+    border-radius: 0 4px 4px 0;
+  }
+  .bs-links { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .bs-day-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    color: white; padding: 2px 10px;
+    border-radius: 10px; margin-bottom: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .bottom-sheet { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>🍜 벳푸·후쿠오카 가족여행 지도</h1>
+    <p>2026년 11월 29일 출발 · 5박6일 · 벳푸 3박 + 후쿠오카 2박</p>
+  </div>
+  <button class="sidebar-toggle" onclick="toggleSidebar()" id="toggleBtn">☰</button>
+</div>
+
+<div class="layout">
+
+  <!-- 모바일 오버레이 -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- 사이드바 -->
+  <div class="sidebar" id="sidebar">
+    <div class="day-tabs" id="dayTabs"></div>
+    <div class="place-list" id="placeList"></div>
+  </div>
+
+  <!-- 지도 -->
+  <div id="map-wrap">
+    <div id="map"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+</div>
+
+<!-- 모바일 바텀 시트 -->
+<div class="bottom-sheet" id="bottomSheet">
+  <div class="bottom-sheet-handle">
+    <div class="bottom-sheet-handle-bar"></div>
+    <button class="bottom-sheet-close" onclick="closeBottomSheet()">✕</button>
+  </div>
+  <div class="bottom-sheet-body" id="bottomSheetBody"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="locations.js"></script>
+<script>
+// ──────────────────────────────────────────────
+// 상태
+// ──────────────────────────────────────────────
+let map, markers = {}, polylines = [], activeDay = "all";
+
+// ──────────────────────────────────────────────
+// 지도 초기화 (Leaflet + OpenStreetMap)
+// ──────────────────────────────────────────────
+map = L.map("map").setView([33.43, 131.0], 9);  // 벳푸~후쿠오카 전체가 보이도록 (이후 fitBounds)
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 19,
+}).addTo(map);
+
+// ──────────────────────────────────────────────
+// 커스텀 마커 아이콘 (이모지 + 순서번호)
+// ──────────────────────────────────────────────
+function createIcon(color, cat, order) {
+  const hasOrder = order > 0;
+  const size = 38;
+  const inner = hasOrder
+    ? `<span style="font-size:16px;font-weight:800;color:white;line-height:1;font-family:Arial,sans-serif">${order}</span>`
+    : `<span style="font-size:20px;line-height:1">${cat.icon}</span>`;
+
+  return L.divIcon({
+    className: "",
+    html: `<div style="
+      background:${color};border:2.5px solid white;border-radius:50%;
+      width:${size}px;height:${size}px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.3);cursor:pointer;
+    ">${inner}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -(size/2 + 4)],
+  });
+}
+
+// ──────────────────────────────────────────────
+// 마커 + 폴리라인 렌더링
+// ──────────────────────────────────────────────
+function renderMarkers() {
+  // 기존 제거
+  Object.values(markers).forEach(m => map.removeLayer(m));
+  markers = {};
+  polylines.forEach(p => map.removeLayer(p));
+  polylines = [];
+
+  const filtered = activeDay === "all"
+    ? LOCATIONS
+    : LOCATIONS.filter(l => l.day === Number(activeDay));
+
+  filtered.forEach(loc => {
+    const dayInfo = DAY_COLORS[loc.day] || { color: "#94a3b8", label: "미배정" };
+    const cat = CATEGORY[loc.category] || { icon: "📍", label: "" };
+    const icon = createIcon(dayInfo.color, cat, loc.order);
+    const mapUrl = `https://maps.google.com/?q=${loc.mapQuery ? encodeURIComponent(loc.mapQuery) : loc.lat + "," + loc.lng}`;
+
+    const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
+
+    marker.bindPopup(`
+      <div style="max-width:230px;font-family:'Apple SD Gothic Neo',sans-serif;">
+        <div style="font-size:15px;font-weight:800;color:#1e293b;margin-bottom:2px;">
+          ${cat.icon} ${loc.name}
+        </div>
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:6px;">${loc.nameJp}</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">${loc.desc}</div>
+        ${loc.tip ? `<div style="font-size:11px;color:#92400e;background:#fffbeb;padding:5px 8px;border-radius:4px;margin-top:6px;border-left:3px solid #f59e0b;">💡 ${loc.tip}</div>` : ""}
+        <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap;">
+          <a href="${mapUrl}" target="_blank" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#eff6ff;color:#1d4ed8;text-decoration:none;">🗺 구글맵</a>
+          ${loc.webUrl ? `<a href="${loc.webUrl}" target="_blank" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#f0fdf4;color:#16a34a;text-decoration:none;">🔗 공식사이트</a>` : ""}
+        </div>
+        <div style="margin-top:6px;font-size:11px;color:white;background:${dayInfo.color};display:inline-block;padding:2px 8px;border-radius:10px;font-weight:700;">${dayInfo.label}</div>
+      </div>
+    `);
+
+    marker.on("click", () => {
+      highlightSidebarItem(loc.id);
+      if (window.innerWidth <= 640) showBottomSheet(loc);
+    });
+    markers[loc.id] = marker;
+  });
+
+  // 동선 폴리라인 (day별 order 순)
+  [1,2,3,4,5,6].forEach(d => {
+    const dayLocs = filtered
+      .filter(l => l.day === d && l.order > 0)
+      .sort((a, b) => a.order - b.order);
+    if (dayLocs.length < 2) return;
+
+    const pl = L.polyline(
+      dayLocs.map(l => [l.lat, l.lng]),
+      { color: DAY_COLORS[d].color, opacity: 0.7, weight: 3, dashArray: "6,4" }
+    ).addTo(map);
+    polylines.push(pl);
+  });
+}
+
+// ──────────────────────────────────────────────
+// 사이드바
+// ──────────────────────────────────────────────
+function renderSidebar() {
+  renderTabs();
+  renderPlaceList();
+}
+
+function renderTabs() {
+  const tabsEl = document.getElementById("dayTabs");
+  const tabs = [
+    { key: "all", label: "전체" },
+    { key: "1", label: "D1 · 11/29", color: DAY_COLORS[1].color },
+    { key: "2", label: "D2 · 11/30", color: DAY_COLORS[2].color },
+    { key: "3", label: "D3 · 12/1", color: DAY_COLORS[3].color },
+    { key: "4", label: "D4 · 12/2", color: DAY_COLORS[4].color },
+    { key: "5", label: "D5 · 12/3", color: DAY_COLORS[5].color },
+    { key: "6", label: "D6 · 12/4", color: DAY_COLORS[6].color },
+    { key: "7", label: "🍽️ 맛집후보", color: DAY_COLORS[7].color },
+  ];
+
+  tabsEl.innerHTML = tabs.map(t => `
+    <button
+      class="day-tab ${activeDay === t.key ? "active" : ""}"
+      style="--day-color:${t.color || "#94a3b8"}"
+      onclick="selectDay('${t.key}')"
+    >${t.label}</button>
+  `).join("");
+}
+
+function renderPlaceList() {
+  const listEl = document.getElementById("placeList");
+  const filtered = activeDay === "all"
+    ? LOCATIONS
+    : LOCATIONS.filter(l => l.day === Number(activeDay));
+
+  const sorted = [...filtered].sort((a, b) => a.day - b.day || a.order - b.order);
+  listEl.innerHTML = sorted.map(loc => placeItemHTML(loc)).join("");
+}
+
+function placeItemHTML(loc) {
+  const dayInfo = DAY_COLORS[loc.day] || { color: "#94a3b8" };
+  const cat = CATEGORY[loc.category] || { icon: "📍" };
+  const mapUrl = `https://maps.google.com/?q=${loc.mapQuery ? encodeURIComponent(loc.mapQuery) : loc.lat + "," + loc.lng}`;
+  return `
+    <div class="place-item" id="item-${loc.id}" onclick="focusLocation('${loc.id}')">
+      <div class="place-top">
+        ${loc.order > 0
+          ? `<div class="order-badge" style="--day-color:${dayInfo.color}">${loc.order}</div>`
+          : `<span class="place-icon">${cat.icon}</span>`}
+        <span class="place-name">${loc.name}</span>
+      </div>
+      <div class="place-namejp">${loc.nameJp}</div>
+      <div class="place-desc">${loc.desc}</div>
+      ${loc.tip ? `<div class="place-tip">💡 ${loc.tip}</div>` : ""}
+      <div class="place-links" onclick="event.stopPropagation()">
+        <a class="link-btn link-btn-map" href="${mapUrl}" target="_blank">🗺 구글맵</a>
+        ${loc.webUrl ? `<a class="link-btn link-btn-web" href="${loc.webUrl}" target="_blank">🔗 공식사이트</a>` : ""}
+      </div>
+    </div>`;
+}
+
+// ──────────────────────────────────────────────
+// 범례
+// ──────────────────────────────────────────────
+function renderLegend() {
+  const el = document.getElementById("legend");
+  el.innerHTML = `<div class="legend-title">일정</div>` +
+    Object.entries(DAY_COLORS).map(([d, v]) => `
+      <div class="legend-item">
+        <div class="legend-dot" style="background:${v.color}"></div>${v.label}
+      </div>`).join("");
+}
+
+// ──────────────────────────────────────────────
+// 인터랙션
+// ──────────────────────────────────────────────
+function selectDay(day) {
+  activeDay = day;
+  renderTabs();
+  renderPlaceList();
+  renderMarkers();
+
+  if (day !== "all") {
+    const locs = LOCATIONS.filter(l => l.day === Number(day));
+    if (locs.length > 0) {
+      const bounds = L.latLngBounds(locs.map(l => [l.lat, l.lng]));
+      map.fitBounds(bounds, { padding: [40, 40] });
+    }
+  } else {
+    map.fitBounds(L.latLngBounds(LOCATIONS.map(l => [l.lat, l.lng])), { padding: [30, 30] });
+  }
+}
+
+function focusLocation(id) {
+  const loc = LOCATIONS.find(l => l.id === id);
+  if (!loc || !markers[id]) return;
+  map.setView([loc.lat, loc.lng], 15);
+  highlightSidebarItem(id);
+  if (window.innerWidth <= 640) {
+    closeSidebar();
+    showBottomSheet(loc);
+  } else {
+    markers[id].openPopup();
+  }
+}
+
+function highlightSidebarItem(id) {
+  document.querySelectorAll(".place-item").forEach(el => el.classList.remove("active"));
+  const el = document.getElementById("item-" + id);
+  if (el) { el.classList.add("active"); el.scrollIntoView({ block: "nearest" }); }
+}
+
+// ──────────────────────────────────────────────
+// 모바일 바텀 시트
+// ──────────────────────────────────────────────
+function showBottomSheet(loc) {
+  const dayInfo = DAY_COLORS[loc.day] || { color: "#94a3b8", label: "" };
+  const cat = CATEGORY[loc.category] || { icon: "📍" };
+  const mapUrl = `https://maps.google.com/?q=${loc.mapQuery ? encodeURIComponent(loc.mapQuery) : loc.lat + "," + loc.lng}`;
+
+  document.getElementById("bottomSheetBody").innerHTML = `
+    <span class="bs-day-badge" style="background:${dayInfo.color}">${dayInfo.label}</span>
+    <div class="bs-name">${cat.icon} ${loc.name}</div>
+    <div class="bs-namejp">${loc.nameJp}</div>
+    <div class="bs-desc">${loc.desc}</div>
+    ${loc.tip ? `<div class="bs-tip">💡 ${loc.tip}</div>` : ""}
+    <div class="bs-links">
+      <a class="link-btn link-btn-map" href="${mapUrl}" target="_blank">🗺 구글맵</a>
+      ${loc.webUrl ? `<a class="link-btn link-btn-web" href="${loc.webUrl}" target="_blank">🔗 공식사이트</a>` : ""}
+    </div>
+  `;
+
+  document.getElementById("bottomSheet").classList.add("open");
+}
+
+function closeBottomSheet() {
+  document.getElementById("bottomSheet").classList.remove("open");
+}
+
+// ──────────────────────────────────────────────
+// 사이드바 토글 (모바일)
+// ──────────────────────────────────────────────
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  const isOpen = sidebar.classList.contains("open");
+  if (isOpen) {
+    closeSidebar();
+  } else {
+    sidebar.classList.add("open");
+    overlay.classList.add("visible");
+    document.getElementById("toggleBtn").textContent = "✕";
+  }
+}
+
+function closeSidebar() {
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebarOverlay").classList.remove("visible");
+  document.getElementById("toggleBtn").textContent = "☰";
+}
+
+// ──────────────────────────────────────────────
+// 초기 실행
+// ──────────────────────────────────────────────
+renderSidebar();
+renderMarkers();
+renderLegend();
+map.fitBounds(L.latLngBounds(LOCATIONS.map(l => [l.lat, l.lng])), { padding: [30, 30] });
+</script>
+</body>
+</html>

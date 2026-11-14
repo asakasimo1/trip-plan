@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛍️ 후쿠오카 여행 쇼핑목록</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #f0f4f8; color: #2d3748; }
+  .hero { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #60a5fa 100%); color: white; padding: 30px 20px 22px; text-align: center; }
+  .hero h1 { font-size: 21px; font-weight: 800; margin-bottom: 6px; }
+  .hero p { font-size: 12.5px; opacity: .88; }
+  .container { max-width: 480px; margin: 0 auto; padding: 16px; }
+  .back { display: inline-block; font-size: 12.5px; font-weight: 700; color: #1e3a5f; text-decoration: none; margin-bottom: 12px; }
+  .section-title { font-size: 13px; font-weight: 800; color: #475569; margin: 18px 0 8px; }
+  .card { background: white; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,.06); margin-bottom: 14px; }
+  .progress { font-size: 12px; color: #64748b; margin-bottom: 8px; }
+  .item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #f1f5f9; }
+  .item:last-child { border-bottom: 0; }
+  .item input { margin-top: 3px; width: 18px; height: 18px; flex-shrink: 0; }
+  .item .name { font-size: 14px; font-weight: 700; color: #1e293b; }
+  .item .meta { font-size: 12px; color: #64748b; margin-top: 2px; line-height: 1.5; }
+  .item.done .name { text-decoration: line-through; color: #94a3b8; }
+  .chip { display: inline-block; font-size: 10.5px; font-weight: 700; border-radius: 6px; padding: 1px 7px; margin-left: 6px; background: #eef2ff; color: #4338ca; vertical-align: middle; }
+  .chip.local { background: #fff7ed; color: #ea580c; }
+  .empty { font-size: 13px; color: #94a3b8; padding: 8px 0; line-height: 1.6; }
+  form { display: flex; gap: 8px; flex-wrap: wrap; }
+  form input[type=text] { flex: 1 1 140px; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
+  form button { border: 0; border-radius: 10px; padding: 10px 16px; font-size: 14px; font-weight: 800; color: white; background: linear-gradient(90deg, #2563eb, #60a5fa); cursor: pointer; }
+  .hint { font-size: 11.5px; color: #64748b; line-height: 1.6; margin-top: 8px; }
+  .del { margin-left: auto; border: 0; background: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 0 4px; }
+  .spots { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .spot { background: white; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+  .spot h4 { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+  .spot p { font-size: 12px; color: #1e293b; line-height: 1.6; font-weight: 500; }
+  @media (max-width: 360px) { .spots { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>🛍️ 쇼핑목록</h1>
+  <p>벳푸·후쿠오카 2026.11.29 – 12.4</p>
+</div>
+<div class="container">
+  <a class="back" href="fukuoka_family_trip.html">← 일정표로</a>
+
+  <p class="section-title">📝 살 것</p>
+  <div class="card">
+    <div class="progress" id="progress"></div>
+    <div id="list"><div class="empty">불러오는 중…</div></div>
+  </div>
+
+  <p class="section-title">➕ 지금 떠오른 것 바로 적기</p>
+  <div class="card">
+    <form id="form">
+      <input type="text" id="name" placeholder="예: 마리오 굿즈, 명란 선물세트" maxlength="60" autocomplete="off">
+      <input type="text" id="where" placeholder="어디서 (선택)" maxlength="30" autocomplete="off">
+      <button type="submit">추가</button>
+    </form>
+    <p class="hint">여기서 추가한 항목은 <b>이 기기(이 브라우저)에만</b> 저장돼요(주황 "이 기기" 표시). 가족 모두가 보게 하려면 Claude에게 "쇼핑목록에 ○○ 추가"라고 말해 주세요 — <code>shopping.json</code>에 반영하면 모든 기기에 보입니다.</p>
+  </div>
+
+  <p class="section-title">📍 일정 중 쇼핑하기 좋은 곳</p>
+  <div class="spots">
+    <div class="spot"><h4>12/2 · 하카타역</h4><p><b>아뮤플라자·한즈·요도바시</b><br>잡화·여행용품·전자제품, 닌텐도 스토어(8F)</p></div>
+    <div class="spot"><h4>12/2 · 벳푸역</h4><p><b>역 기념품 매장</b><br>소닉 타기 전 (11:00 체크아웃 후)</p></div>
+    <div class="spot"><h4>12/3 · 텐진 (코스 A)</h4><p><b>텐진·다이묘</b><br>다자이후에서 돌아와 쇼핑</p></div>
+    <div class="spot"><h4>12/4 · 하카타역</h4><p><b>귀국일 마지막 쇼핑</b><br>호텔이 역 직결, 12:50 출발 전</p></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'fukuoka-shopping-v1';
+  var shared = [], store = { done: {}, local: [] };
+  try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done && s.local) store = s; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function row(it, isLocal) {
+    var id = (isLocal ? 'l:' : 's:') + it.id;
+    var r = el('div', 'item' + (store.done[id] ? ' done' : ''));
+    var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!store.done[id];
+    cb.addEventListener('change', function () { store.done[id] = cb.checked; if (!cb.checked) delete store.done[id]; save(); render(); });
+    var box = el('div'); var nm = el('div', 'name', it.name);
+    if (isLocal) nm.appendChild(el('span', 'chip local', '이 기기'));
+    box.appendChild(nm);
+    var meta = [it.where && ('📍 ' + it.where), it.qty && ('수량 ' + it.qty), it.for && ('👤 ' + it.for), it.note].filter(Boolean).join(' · ');
+    if (meta) box.appendChild(el('div', 'meta', meta));
+    r.appendChild(cb); r.appendChild(box);
+    if (isLocal) {
+      var d = el('button', 'del', '✕'); d.type = 'button'; d.title = '삭제';
+      d.addEventListener('click', function () {
+        store.local = store.local.filter(function (x) { return x.id !== it.id; }); delete store.done[id]; save(); render();
+      });
+      r.appendChild(d);
+    }
+    return r;
+  }
+  function render() {
+    var list = document.getElementById('list'); list.textContent = '';
+    var all = shared.map(function (i) { return [i, false]; }).concat(store.local.map(function (i) { return [i, true]; }));
+    if (!all.length) list.appendChild(el('div', 'empty', '아직 비어 있어요. 생각날 때마다 아래에 적거나 Claude에게 추가를 요청하세요.'));
+    all.forEach(function (p) { list.appendChild(row(p[0], p[1])); });
+    var done = all.filter(function (p) { return store.done[(p[1] ? 'l:' : 's:') + p[0].id]; }).length;
+    document.getElementById('progress').textContent = all.length ? ('구매 ' + done + ' / ' + all.length) : '';
+  }
+  document.getElementById('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var n = document.getElementById('name'), w = document.getElementById('where');
+    var name = n.value.trim(); if (!name) return;
+    store.local.push({ id: String(Date.now()), name: name, where: w.value.trim() });
+    save(); n.value = ''; w.value = ''; render();
+  });
+  fetch('shopping.json').then(function (r) { return r.json(); }).then(function (d) { shared = d.items || []; render(); })
+    .catch(function () { render(); });
+})();
+</script>
+</body>
+</html>

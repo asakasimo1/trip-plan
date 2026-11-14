@@ -2,13 +2,31 @@
   "trips": [
     {
       "id": "fukuoka",
-      "title": "후쿠오카 가족여행",
+      "title": "벳푸 온천 + 후쿠오카 5박6일",
       "emoji": "🍜",
-      "dest": "일본 후쿠오카",
-      "start": null,
-      "end": null,
-      "badges": ["🇯🇵 해외", "⏳ 일정 미정"],
-      "links": []
+      "dest": "일본 오이타 벳푸 · 후쿠오카",
+      "start": "2026-11-29",
+      "end": "2026-12-04",
+      "badges": [
+        "👨‍👩‍👧 가족",
+        "♨️ 벳푸 3박",
+        "🏨 하카타 2박",
+        "📝 1차안"
+      ],
+      "links": [
+        {
+          "label": "📋 일정표",
+          "href": "fukuoka/fukuoka_family_trip.html"
+        },
+        {
+          "label": "🗺️ 지도",
+          "href": "fukuoka/map/map.html"
+        },
+        {
+          "label": "🛍️ 쇼핑목록",
+          "href": "fukuoka/shopping.html"
+        }
+      ]
     },
     {
       "id": "high-one",
@@ -17,10 +35,19 @@
       "dest": "강원도 정선 하이원리조트",
       "start": "2026-07-29",
       "end": "2026-07-31",
-      "badges": ["👨‍👩‍👧 3인 가족", "🚗 자차"],
+      "badges": [
+        "👨‍👩‍👧 3인 가족",
+        "🚗 자차"
+      ],
       "links": [
-        { "label": "📋 일정표", "href": "high-one/high_one_family_trip.html" },
-        { "label": "🗺️ 지도", "href": "high-one/map/map.html" }
+        {
+          "label": "📋 일정표",
+          "href": "high-one/high_one_family_trip.html"
+        },
+        {
+          "label": "🗺️ 지도",
+          "href": "high-one/map/map.html"
+        }
       ]
     },
     {
@@ -30,10 +57,20 @@
       "dest": "일본 홋카이도 삿포로",
       "start": "2026-04-24",
       "end": "2026-04-28",
-      "badges": ["👨‍👩‍👧 3인 가족", "🚃 대중교통", "🌸 벚꽃 시즌"],
+      "badges": [
+        "👨‍👩‍👧 3인 가족",
+        "🚃 대중교통",
+        "🌸 벚꽃 시즌"
+      ],
       "links": [
-        { "label": "📋 일정표", "href": "sapporo/sapporo_family_trip.html" },
-        { "label": "🗺️ 지도", "href": "sapporo/map/map.html" }
+        {
+          "label": "📋 일정표",
+          "href": "sapporo/sapporo_family_trip.html"
+        },
+        {
+          "label": "🗺️ 지도",
+          "href": "sapporo/map/map.html"
+        }
       ]
     }
   ]

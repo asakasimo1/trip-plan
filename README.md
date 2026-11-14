@@ -6,7 +6,7 @@
 
 | 폴더 | 여행 | 기간 | 상태 |
 |------|------|------|------|
-| `fukuoka/` | 후쿠오카 가족여행 | 2026년, 일정 미정 | 계획 중 |
+| `fukuoka/` | 벳푸 온천 + 후쿠오카 5박6일 | 2026-11-29 ~ 12-04 | 1차안 |
 | `high-one/` | 하이원리조트 2박3일 | 2026-07-29 ~ 07-31 | 완료 |
 | `sapporo/` | 삿포로 4박5일 | 2026-04-24 ~ 04-28 | 완료 |
 
@@ -33,6 +33,7 @@ trip-plan/
 ## 공개 주소
 
 - 허브: https://asakasimo1.github.io/trip-plan/
+- 벳푸·후쿠오카: https://asakasimo1.github.io/trip-plan/fukuoka/fukuoka_family_trip.html
 - 삿포로: https://asakasimo1.github.io/trip-plan/sapporo/sapporo_family_trip.html
 - 하이원: https://asakasimo1.github.io/trip-plan/high-one/high_one_family_trip.html
 
