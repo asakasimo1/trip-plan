@@ -20,7 +20,7 @@
         },
         {
           "label": "🗺️ 지도",
-          "href": "fukuoka/map/map.html"
+          "href": "fukuoka/map/gmap.html"
         },
         {
           "label": "🛍️ 쇼핑목록",

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍜 벳푸·후쿠오카 구글 지도</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #f0f4f8; color: #2d3748; }
+  .header { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: white; padding: 14px 16px 12px; }
+  .header h1 { font-size: 16px; font-weight: 800; }
+  .header p { font-size: 12px; opacity: .85; margin-top: 2px; }
+  .back { display: inline-block; color: white; opacity: .9; font-size: 12px; font-weight: 700; text-decoration: none; margin-bottom: 6px; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px; background: white; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 5; }
+  .tab { flex: 0 0 auto; border: 1px solid #cbd5e1; background: white; color: #475569; font-size: 12.5px; font-weight: 800; border-radius: 20px; padding: 6px 13px; cursor: pointer; font-family: inherit; }
+  .tab.on { color: white; border-color: transparent; background: var(--c, #1e3a5f); }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 12px; }
+  .mapbox { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.1); }
+  .mapbox iframe { display: block; width: 100%; height: 58vh; min-height: 320px; border: 0; }
+  .mapbar { display: flex; gap: 8px; align-items: center; padding: 8px 10px; flex-wrap: wrap; }
+  .mapbar .cur { flex: 1 1 160px; font-size: 12.5px; font-weight: 700; color: #1e293b; }
+  .mapbar a, .mapbar button { font-size: 12px; font-weight: 800; color: #1d4ed8; background: #eff6ff; border: 0; border-radius: 20px; padding: 6px 12px; text-decoration: none; cursor: pointer; font-family: inherit; }
+  .list { margin-top: 12px; }
+  .place { display: flex; gap: 10px; background: white; border-radius: 12px; padding: 11px 12px; margin-bottom: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.06); cursor: pointer; border: 2px solid transparent; }
+  .place.sel { border-color: var(--c, #1e3a5f); }
+  .num { flex: 0 0 26px; height: 26px; border-radius: 50%; color: white; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; background: var(--c, #64748b); }
+  .pname { font-size: 14px; font-weight: 800; color: #1e293b; }
+  .pname small { font-size: 11px; font-weight: 600; color: #94a3b8; margin-left: 6px; }
+  .pdesc { font-size: 12px; color: #64748b; line-height: 1.55; margin-top: 3px; }
+  .ptip { font-size: 11.5px; color: #92400e; background: #fffbeb; border-radius: 6px; padding: 4px 8px; margin-top: 5px; line-height: 1.5; }
+  .foot { text-align: center; font-size: 11.5px; color: #94a3b8; padding: 14px 8px 24px; line-height: 1.7; }
+  .foot a { color: #64748b; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="../fukuoka_family_trip.html">← 일정표로</a>
+  <h1>🍜 벳푸·후쿠오카 구글 지도</h1>
+  <p>11/29 – 12/4 · 날짜 탭 → 그날 동선 · 장소를 누르면 그 위치로 이동</p>
+</div>
+<div class="tabs" id="tabs"></div>
+<div class="wrap">
+  <div class="mapbox">
+    <iframe id="frame" title="구글 지도" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    <div class="mapbar">
+      <div class="cur" id="cur"></div>
+      <button type="button" id="routeBtn">🛣️ 하루 동선 보기</button>
+      <a id="openApp" href="#" target="_blank" rel="noopener">구글맵 앱으로 열기</a>
+    </div>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="foot">지도는 구글 지도(한국어)입니다. 마커 위치는 장소명 검색 기준이에요.<br>
+    <a href="map.html">전체 마커 한눈에 보기(OSM 지도)</a></div>
+</div>
+<script src="locations.js"></script>
+<script>
+(function () {
+  var REGION = function (l) { return l.id === 'oita_airport' ? '大分県' : (l.lat < 33.45 && l.lng > 131 ? '大分県別府市' : '福岡県福岡市'); };
+  var Q = function (l) { var b = l.mapQuery || l.nameJp; return /福岡|別府|大分/.test(b) ? b : b + ' ' + REGION(l); };
+  var enc = encodeURIComponent;
+  var frame = document.getElementById('frame'), cur = document.getElementById('cur');
+  var day = 1, selId = null;
+  function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+  function dayItems(d) {
+    return LOCATIONS.filter(function (l) { return l.day === d; })
+      .sort(function (a, b) { return (a.order || 99) - (b.order || 99); });
+  }
+  function routeStops(d) { return dayItems(d).filter(function (l) { return l.order > 0; }); }
+  function showPlace(l) {
+    selId = l.id;
+    frame.src = 'https://www.google.com/maps?q=' + enc(Q(l)) + '&hl=ko&z=15&output=embed';
+    cur.textContent = '📍 ' + l.name;
+    document.getElementById('openApp').href = 'https://www.google.com/maps/search/?api=1&query=' + enc(Q(l));
+    mark();
+  }
+  function showRoute() {
+    var s = routeStops(day);
+    selId = null;
+    if (s.length < 2) { if (s[0]) showPlace(s[0]); else if (dayItems(day)[0]) showPlace(dayItems(day)[0]); return; }
+    frame.src = 'https://www.google.com/maps?saddr=' + enc(Q(s[0])) + '&daddr=' + s.slice(1).map(function (l) { return enc(Q(l)); }).join('+to:') + '&hl=ko&output=embed';
+    cur.textContent = '🛣️ ' + DAY_COLORS[day].label + ' 동선 (' + s.length + '곳)';
+    document.getElementById('openApp').href = 'https://www.google.com/maps/dir/' + s.map(function (l) { return enc(Q(l)); }).join('/') + '/?hl=ko';
+    mark();
+  }
+  function mark() {
+    document.querySelectorAll('.place').forEach(function (p) { p.classList.toggle('sel', p.getAttribute('data-id') === selId); });
+  }
+  function renderList() {
+    var list = document.getElementById('list'); list.textContent = '';
+    var c = DAY_COLORS[day].color; list.style.setProperty('--c', c);
+    dayItems(day).forEach(function (l) {
+      var p = el('div', 'place'); p.setAttribute('data-id', l.id); p.style.setProperty('--c', c);
+      p.appendChild(el('div', 'num', l.order > 0 ? String(l.order) : '·'));
+      var b = el('div'); var n = el('div', 'pname', l.name); n.appendChild(el('small', '', l.nameJp)); b.appendChild(n);
+      if (l.desc) b.appendChild(el('div', 'pdesc', l.desc));
+      if (l.tip) b.appendChild(el('div', 'ptip', '💡 ' + l.tip));
+      p.appendChild(b);
+      p.addEventListener('click', function () { showPlace(l); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      list.appendChild(p);
+    });
+  }
+  function renderTabs() {
+    var t = document.getElementById('tabs'); t.textContent = '';
+    var names = { 1: 'D1 · 11/29', 2: 'D2 · 11/30', 3: 'D3 · 12/1', 4: 'D4 · 12/2', 5: 'D5 · 12/3', 6: 'D6 · 12/4', 7: '🍽️ 맛집후보' };
+    Object.keys(names).forEach(function (k) {
+      var b = el('button', 'tab' + (+k === day ? ' on' : ''), names[k]); b.type = 'button';
+      b.style.setProperty('--c', DAY_COLORS[k].color);
+      b.addEventListener('click', function () { day = +k; renderTabs(); renderList(); if (day === 7) showPlace(dayItems(7)[0]); else showRoute(); });
+      t.appendChild(b);
+    });
+  }
+  document.getElementById('routeBtn').addEventListener('click', function () { if (day === 7) return; showRoute(); });
+  var m = location.hash.match(/day=(\d)/); if (m && DAY_COLORS[m[1]]) day = +m[1];
+  renderTabs(); renderList(); if (day === 7) showPlace(dayItems(7)[0]); else showRoute();
+})();
+</script>
+</body>
+</html>
