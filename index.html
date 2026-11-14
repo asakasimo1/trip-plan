@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 가족 여행 플랜</title>
+<style>
+  :root { --bg1:#1e3a5f; --bg2:#2563eb; --bg3:#60a5fa; --card:#fff; --ink:#1e293b; --sub:#64748b; --chip:#f1f5f9; --chip-ink:#475569; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 32px 16px 48px;
+    color: var(--ink);
+  }
+  .wrap { max-width: 440px; margin: 0 auto; }
+  header { color: #fff; text-align: center; margin-bottom: 24px; }
+  header h1 { font-size: 24px; font-weight: 800; }
+  header p { font-size: 13px; opacity: .85; margin-top: 6px; }
+  h2 { color: #fff; font-size: 13px; font-weight: 700; letter-spacing: .04em; opacity: .9; margin: 24px 4px 10px; }
+  .card { background: var(--card); border-radius: 20px; padding: 22px 20px; margin-bottom: 14px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+  .top { display: flex; gap: 14px; align-items: center; }
+  .emoji { font-size: 38px; line-height: 1; }
+  .card h3 { font-size: 18px; font-weight: 800; }
+  .meta { font-size: 12.5px; color: var(--sub); margin-top: 3px; line-height: 1.5; }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 0; }
+  .badge { background: var(--chip); color: var(--chip-ink); font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .links { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .btn { flex: 1 1 120px; text-align: center; padding: 11px 10px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; color: #fff; background: linear-gradient(90deg, #2563eb, #60a5fa); }
+  .btn.alt { background: linear-gradient(90deg, #f97316, #fb923c); }
+  .btn:hover { opacity: .88; }
+  .pending { margin-top: 16px; font-size: 13px; color: var(--sub); background: var(--chip); border-radius: 12px; padding: 11px 12px; text-align: center; }
+  .empty { color: #fff; text-align: center; font-size: 14px; padding: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🧳 우리 가족 여행 플랜</h1>
+    <p>다가오는 여행과 지난 여행을 한곳에서</p>
+  </header>
+  <main id="list"><p class="empty">불러오는 중…</p></main>
+</div>
+<script>
+(function () {
+  var list = document.getElementById('list');
+  var D = ['일', '월', '화', '수', '목', '금', '토'];
+  function fmt(s) { var d = new Date(s + 'T00:00:00'); return (d.getMonth() + 1) + '/' + d.getDate() + '(' + D[d.getDay()] + ')'; }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  function period(t) {
+    if (!t.start) return '일정 미정';
+    var a = new Date(t.start + 'T00:00:00'), b = new Date(t.end + 'T00:00:00');
+    var n = Math.round((b - a) / 86400000);
+    return a.getFullYear() + ' · ' + fmt(t.start) + ' ~ ' + fmt(t.end) + ' · ' + n + '박' + (n + 1) + '일';
+  }
+  function card(t) {
+    var c = el('section', 'card'), top = el('div', 'top');
+    top.appendChild(el('div', 'emoji', t.emoji));
+    var info = el('div');
+    info.appendChild(el('h3', '', t.title));
+    info.appendChild(el('div', 'meta', period(t) + ' · ' + t.dest));
+    top.appendChild(info); c.appendChild(top);
+    if (t.badges && t.badges.length) {
+      var bs = el('div', 'badges');
+      t.badges.forEach(function (b) { bs.appendChild(el('span', 'badge', b)); });
+      c.appendChild(bs);
+    }
+    if (t.links && t.links.length) {
+      var ls = el('div', 'links');
+      t.links.forEach(function (l, i) {
+        var a = el('a', 'btn' + (i ? ' alt' : ''), l.label); a.href = l.href; ls.appendChild(a);
+      });
+      c.appendChild(ls);
+    } else {
+      c.appendChild(el('div', 'pending', '일정표 준비 중'));
+    }
+    return c;
+  }
+  function section(title, trips) {
+    if (!trips.length) return;
+    list.appendChild(el('h2', '', title));
+    trips.forEach(function (t) { list.appendChild(card(t)); });
+  }
+  fetch('trips.json').then(function (r) { return r.json(); }).then(function (data) {
+    list.textContent = '';
+    var today = new Date().toISOString().slice(0, 10);
+    var ts = data.trips;
+    var past = ts.filter(function (t) { return t.end && t.end < today; })
+                 .sort(function (a, b) { return b.start < a.start ? -1 : 1; });
+    var upcoming = ts.filter(function (t) { return !(t.end && t.end < today); })
+                     .sort(function (a, b) { return (a.start || '9999') < (b.start || '9999') ? -1 : 1; });
+    section('다가오는 여행', upcoming);
+    section('지난 여행', past);
+  }).catch(function () {
+    list.textContent = '';
+    list.appendChild(el('p', 'empty', '목록을 불러오지 못했습니다. 웹 주소(GitHub Pages)로 열어 주세요.'));
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "trips": [
+    {
+      "id": "fukuoka",
+      "title": "후쿠오카 가족여행",
+      "emoji": "🍜",
+      "dest": "일본 후쿠오카",
+      "start": null,
+      "end": null,
+      "badges": ["🇯🇵 해외", "⏳ 일정 미정"],
+      "links": []
+    },
+    {
+      "id": "high-one",
+      "title": "하이원리조트 2박3일",
+      "emoji": "⛰️",
+      "dest": "강원도 정선 하이원리조트",
+      "start": "2026-07-29",
+      "end": "2026-07-31",
+      "badges": ["👨‍👩‍👧 3인 가족", "🚗 자차"],
+      "links": [
+        { "label": "📋 일정표", "href": "high-one/high_one_family_trip.html" },
+        { "label": "🗺️ 지도", "href": "high-one/map/map.html" }
+      ]
+    },
+    {
+      "id": "sapporo",
+      "title": "삿포로 4박5일",
+      "emoji": "🗾",
+      "dest": "일본 홋카이도 삿포로",
+      "start": "2026-04-24",
+      "end": "2026-04-28",
+      "badges": ["👨‍👩‍👧 3인 가족", "🚃 대중교통", "🌸 벚꽃 시즌"],
+      "links": [
+        { "label": "📋 일정표", "href": "sapporo/sapporo_family_trip.html" },
+        { "label": "🗺️ 지도", "href": "sapporo/map/map.html" }
+      ]
+    }
+  ]
+}
