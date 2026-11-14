@@ -36,7 +36,7 @@
 <div class="header">
   <a class="back" href="../fukuoka_family_trip.html">← 일정표로</a>
   <h1>🍜 벳푸·후쿠오카 구글 지도</h1>
-  <p>11/29 – 12/4 · 날짜 탭 → 그날 장소 · 장소를 누르면 그 위치로 이동</p>
+  <p>11/29 – 12/4 · 처음엔 전체 지도 · 날짜 탭 → 그날 장소 · 장소를 누르면 그 위치로 이동</p>
 </div>
 <div class="tabs" id="tabs"></div>
 <div class="wrap">
@@ -46,7 +46,7 @@
       <div class="cur" id="cur"></div>
       <a id="routeBtn" href="#" target="_blank" rel="noopener">🛣️ 하루 동선(구글맵)</a>
       <a id="openApp" href="#" target="_blank" rel="noopener">구글맵 앱으로 열기</a>
-      <a href="https://www.google.com/maps/d/viewer?mid=15WOosCb-NuJpVjpzObgiSXqQoXHo4g8&hl=ko" target="_blank" rel="noopener">📌 내 지도(전체·날짜별)</a>
+      <a href="https://www.google.com/maps/d/viewer?mid=15WOosCb-NuJpVjpzObgiSXqQoXHo4g8&hl=ko" target="_blank" rel="noopener">📌 내 지도 크게 보기</a>
     </div>
   </div>
   <div class="list" id="list"></div>
@@ -60,9 +60,12 @@
   var Q = function (l) { var b = l.mapQuery || l.nameJp; return /福岡|別府|大分/.test(b) ? b : b + ' ' + REGION(l); };
   var enc = encodeURIComponent;
   var frame = document.getElementById('frame'), cur = document.getElementById('cur');
-  var day = 1, selId = null;
+  var MID = '15WOosCb-NuJpVjpzObgiSXqQoXHo4g8';   // 공유한 구글 내 지도(My Maps): 전체 마커·날짜별 색
+  var day = 0, selId = null;
+  var color = function (d) { return d === 0 ? '#1e3a5f' : DAY_COLORS[d].color; };
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
   function dayItems(d) {
+    if (d === 0) return LOCATIONS.slice().sort(function (a, b) { return (a.day - b.day) || ((a.order || 99) - (b.order || 99)); });
     return LOCATIONS.filter(function (l) { return l.day === d; })
       .sort(function (a, b) { return (a.order || 99) - (b.order || 99); });
   }
@@ -74,12 +77,21 @@
     document.getElementById('openApp').href = 'https://www.google.com/maps/search/?api=1&query=' + enc(Q(l));
     mark();
   }
+  function showOverview() {
+    selId = null;
+    frame.src = 'https://www.google.com/maps/d/embed?mid=' + MID + '&hl=ko';
+    cur.textContent = '🗺️ 전체 한눈에 — 날짜별 색 마커';
+    document.getElementById('openApp').href = 'https://www.google.com/maps/d/viewer?mid=' + MID + '&hl=ko';
+    document.getElementById('routeBtn').style.display = 'none';
+    mark();
+  }
   function setRouteLink() {
     var s = routeStops(day), rb = document.getElementById('routeBtn');
     if (s.length >= 2) { rb.href = 'https://www.google.com/maps/dir/' + s.map(function (l) { return enc(Q(l)); }).join('/') + '/?hl=ko'; rb.style.display = ''; }
     else rb.style.display = 'none';
   }
   function showFirst() {
+    if (day === 0) { showOverview(); return; }
     setRouteLink();
     var it = dayItems(day); if (it[0]) showPlace(it[0]);
   }
@@ -88,29 +100,32 @@
   }
   function renderList() {
     var list = document.getElementById('list'); list.textContent = '';
-    var c = DAY_COLORS[day].color; list.style.setProperty('--c', c);
+    var c = color(day); list.style.setProperty('--c', c);
     dayItems(day).forEach(function (l) {
-      var p = el('div', 'place'); p.setAttribute('data-id', l.id); p.style.setProperty('--c', c);
-      p.appendChild(el('div', 'num', l.order > 0 ? String(l.order) : '·'));
+      var p = el('div', 'place'); p.setAttribute('data-id', l.id); p.style.setProperty('--c', day === 0 ? DAY_COLORS[l.day].color : c);
+      p.appendChild(el('div', 'num', day === 0 ? (l.day === 7 ? '🍽' : String(l.day)) : (l.order > 0 ? String(l.order) : '·')));
       var b = el('div'); var n = el('div', 'pname', l.name); n.appendChild(el('small', '', l.nameJp)); b.appendChild(n);
       if (l.desc) b.appendChild(el('div', 'pdesc', l.desc));
       if (l.tip) b.appendChild(el('div', 'ptip', '💡 ' + l.tip));
       p.appendChild(b);
-      p.addEventListener('click', function () { showPlace(l); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      p.addEventListener('click', function () {
+        if (day === 0) { day = l.day; renderTabs(); renderList(); setRouteLink(); }
+        showPlace(l); window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
       list.appendChild(p);
     });
   }
   function renderTabs() {
     var t = document.getElementById('tabs'); t.textContent = '';
-    var names = { 1: 'D1 · 11/29', 2: 'D2 · 11/30', 3: 'D3 · 12/1', 4: 'D4 · 12/2', 5: 'D5 · 12/3', 6: 'D6 · 12/4', 7: '🍽️ 맛집후보' };
+    var names = { 0: '🗺️ 전체', 1: 'D1 · 11/29', 2: 'D2 · 11/30', 3: 'D3 · 12/1', 4: 'D4 · 12/2', 5: 'D5 · 12/3', 6: 'D6 · 12/4', 7: '🍽️ 맛집후보' };
     Object.keys(names).forEach(function (k) {
       var b = el('button', 'tab' + (+k === day ? ' on' : ''), names[k]); b.type = 'button';
-      b.style.setProperty('--c', DAY_COLORS[k].color);
+      b.style.setProperty('--c', color(+k));
       b.addEventListener('click', function () { day = +k; renderTabs(); renderList(); showFirst(); });
       t.appendChild(b);
     });
   }
-  var m = location.hash.match(/day=(\d)/); if (m && DAY_COLORS[m[1]]) day = +m[1];
+  var m = location.hash.match(/day=(\d)/); if (m && (+m[1] === 0 || DAY_COLORS[m[1]])) day = +m[1];
   renderTabs(); renderList(); showFirst();
 })();
 </script>
