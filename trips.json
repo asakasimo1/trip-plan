@@ -72,6 +72,24 @@
           "href": "sapporo/map/map.html"
         }
       ]
+    },
+    {
+      "id": "taean-camping",
+      "title": "태안 오션블루스 캠핑 1박2일",
+      "emoji": "⛺",
+      "dest": "충남 태안 오션블루스",
+      "start": "2026-10-08",
+      "end": "2026-10-09",
+      "badges": [
+        "👨‍👩‍👧 가족",
+        "⛺ 캠핑 1박"
+      ],
+      "links": [
+        {
+          "label": "📋 캠핑 플랜",
+          "href": "taean-camping/index.html"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>태안 오션블루스 캠핑</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap">
+<style>
+  :root {
+    --bg: #f5efe4;
+    --surface: #ffffff;
+    --surface-2: #faf5ea;
+    --ink: #24201a;
+    --ink-soft: #5c5347;
+    --muted: #8c8171;
+    --border: #e6dcc8;
+    --ember: #c9602a;
+    --ember-soft: #f3ddc9;
+    --teal: #1f5f5b;
+    --teal-soft: #dceeec;
+    --gold: #a98a2f;
+    --gold-soft: #f1e6c6;
+    --shadow: 0 10px 30px -14px rgba(36,32,26,.25);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #161310; --surface: #1f1b16; --surface-2: #26211a; --ink: #f1ead9;
+      --ink-soft: #cdc2ad; --muted: #8f8571; --border: #3a332a; --ember: #e08a4d;
+      --ember-soft: #3a2b1d; --teal: #5fb3ac; --teal-soft: #1d3634; --gold: #d9bb6a;
+      --gold-soft: #3a3121; --shadow: 0 10px 30px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161310; --surface: #1f1b16; --surface-2: #26211a; --ink: #f1ead9;
+    --ink-soft: #cdc2ad; --muted: #8f8571; --border: #3a332a; --ember: #e08a4d;
+    --ember-soft: #3a2b1d; --teal: #5fb3ac; --teal-soft: #1d3634; --gold: #d9bb6a;
+    --gold-soft: #3a3121; --shadow: 0 10px 30px -14px rgba(0,0,0,.6);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', -apple-system, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 0 72px; }
+
+  header { background: radial-gradient(120% 140% at 15% -10%, rgba(201,96,42,.35), transparent 55%), linear-gradient(160deg, var(--teal) 0%, #163e3b 70%); color: #fdf8ee; padding: 36px 24px 30px; border-radius: 0 0 28px 28px; box-shadow: var(--shadow); }
+  .eyebrow { font-size: 12.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #ffd9ae; opacity: .9; margin-bottom: 10px; }
+  h1 { font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif; font-size: clamp(26px, 7vw, 32px); font-weight: 400; margin: 0 0 14px; text-wrap: balance; line-height: 1.3; }
+  .trip-meta { display: flex; flex-wrap: wrap; gap: 10px 18px; font-size: 13.5px; color: #f3e7d4; }
+  .trip-meta b { color: #fff; font-weight: 700; }
+  .fam-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .fam-pill { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 7px 14px 7px 10px; font-size: 13px; font-weight: 600; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .dot.suahne { background: #ff9d6b; }
+  .dot.jaeine { background: #7ad6cc; }
+
+  section { padding: 34px 20px 0; }
+  .sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
+  .sec-num { font-family: 'Gowun Dodum', sans-serif; font-size: 13px; color: var(--ember); background: var(--ember-soft); border-radius: 8px; padding: 3px 9px; font-weight: 700; }
+  h2 { font-family: 'Gowun Dodum', 'Noto Sans KR', sans-serif; font-size: 21px; font-weight: 400; margin: 0; color: var(--ink); }
+  .sec-sub { font-size: 13px; color: var(--muted); margin: -8px 0 18px; }
+
+  .weather { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; display: flex; gap: 16px; align-items: center; box-shadow: var(--shadow); }
+  .weather-icon { font-size: 32px; flex-shrink: 0; }
+  .weather-days { display: flex; gap: 22px; flex-wrap: wrap; }
+  .weather-day .wd-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .weather-day .wd-temp { font-size: 15px; font-weight: 700; margin-top: 2px; }
+  .weather-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 10px; }
+
+  .day-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+  .day-tab { flex: 1; text-align: center; padding: 10px; border-radius: 12px; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); font-weight: 700; font-size: 13.5px; color: var(--muted); transition: .15s; }
+  .day-tab.active { border-color: var(--ember); color: var(--ember); background: var(--ember-soft); }
+  .timeline { display: none; flex-direction: column; }
+  .timeline.active { display: flex; }
+  .tl-item { display: flex; gap: 14px; padding-bottom: 20px; position: relative; }
+  .tl-item:not(:last-child)::before { content: ''; position: absolute; left: 28px; top: 30px; bottom: -4px; width: 2px; background: var(--border); }
+  .tl-time { flex-shrink: 0; width: 56px; font-size: 12.5px; font-weight: 800; color: var(--teal); padding-top: 6px; font-variant-numeric: tabular-nums; text-align: right; }
+  .tl-dot { flex-shrink: 0; width: 15px; height: 15px; border-radius: 50%; background: var(--surface); border: 3px solid var(--ember); margin-top: 6px; z-index: 1; }
+  .tl-body { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; flex: 1; box-shadow: var(--shadow); }
+  .tl-title { font-weight: 700; font-size: 14.5px; }
+  .tl-desc { font-size: 12.5px; color: var(--ink-soft); margin-top: 4px; }
+  .tl-tag { display: inline-block; margin-top: 7px; font-size: 11px; font-weight: 700; background: var(--teal-soft); color: var(--teal); padding: 2px 9px; border-radius: 999px; }
+
+  .filter-row { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .filter-btn { border: 1.5px solid var(--border); background: var(--surface); color: var(--ink-soft); border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+  .filter-btn.active[data-f="all"] { border-color: var(--ink); color: var(--ink); background: var(--surface-2); }
+  .filter-btn.active[data-f="suahne"] { border-color: #e2793f; color: #c9602a; background: var(--ember-soft); }
+  .filter-btn.active[data-f="jaeine"] { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+  .filter-btn.active[data-f="gongdong"] { border-color: var(--gold); color: var(--gold); background: var(--gold-soft); }
+
+  .cat-block { margin-bottom: 22px; }
+  .cat-title { font-size: 13px; font-weight: 800; color: var(--ink-soft); letter-spacing: .03em; margin-bottom: 9px; display: flex; align-items: center; gap: 7px; }
+  .item-list { display: flex; flex-direction: column; gap: 7px; }
+  .item { display: flex; align-items: center; gap: 11px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 11px 13px; font-size: 13.5px; cursor: pointer; transition: .12s; }
+  .item:active { transform: scale(.985); }
+  .item.checked { opacity: .45; }
+  .item.checked .item-name { text-decoration: line-through; }
+  .chk { width: 19px; height: 19px; border-radius: 6px; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; }
+  .item.checked .chk { background: var(--teal); border-color: var(--teal); }
+  .item-name { flex: 1; }
+  .tag { flex-shrink: 0; font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .tag.suahne { background: var(--ember-soft); color: var(--ember); }
+  .tag.jaeine { background: var(--teal-soft); color: var(--teal); }
+  .tag.gongdong { background: var(--gold-soft); color: var(--gold); }
+  .tag.gakja { background: var(--surface-2); color: var(--muted); }
+  .del-btn { flex-shrink: 0; background: none; border: none; color: var(--muted); font-size: 16px; padding: 2px 4px; cursor: pointer; line-height: 1; }
+
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-row { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+  .progress-bar { height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--ember), var(--gold)); border-radius: 999px; transition: width .3s; }
+
+  .note-card { background: var(--gold-soft); border: 1px solid var(--gold); border-radius: 16px; padding: 18px 20px; color: var(--ink); }
+  .note-card h3 { margin: 0 0 8px; font-size: 15px; font-family: 'Gowun Dodum', sans-serif; font-weight: 400; color: #8a6d1f; }
+  :root[data-theme="dark"] .note-card h3, :root:not([data-theme="light"]) .note-card h3 { color: var(--gold); }
+  .note-card p { margin: 0 0 8px; font-size: 13px; color: var(--ink-soft); }
+  .note-card ul { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-soft); }
+  .note-card li { margin-bottom: 4px; }
+
+  .provided-card { background: var(--teal-soft); border: 1px solid var(--teal); border-radius: 16px; padding: 18px 20px; }
+  .provided-card h3 { margin: 0 0 8px; font-size: 15px; font-family: 'Gowun Dodum', sans-serif; font-weight: 400; color: var(--teal); }
+  .provided-card > p { margin: 0 0 12px; font-size: 13px; color: var(--ink-soft); }
+  .provided-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; margin-bottom: 12px; }
+  .provided-item { font-size: 12.5px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; color: var(--ink); }
+  .provided-warn { font-size: 12px; color: var(--ink-soft); margin: 0; line-height: 1.6; }
+  .provided-warn b { color: var(--ink); }
+  @media (max-width: 380px) { .provided-grid { grid-template-columns: 1fr; } }
+
+  /* ── 추가/공유 UI ── */
+  .sync-banner { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 9px 14px; border-radius: 10px; margin-bottom: 14px; font-weight: 600; }
+  .sync-banner.live { background: var(--teal-soft); color: var(--teal); }
+  .sync-banner.readonly { background: var(--gold-soft); color: #8a6d1f; }
+  :root[data-theme="dark"] .sync-banner.readonly, :root:not([data-theme="light"]) .sync-banner.readonly { color: var(--gold); }
+  .sync-banner.offline { background: var(--surface-2); color: var(--muted); }
+  .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); flex-shrink: 0; animation: pulse-dot 1.8s infinite; }
+  @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+  .add-row { display: flex; gap: 6px; margin-top: 8px; }
+  .add-input { flex: 1; min-width: 0; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 13.5px; font-family: inherit; }
+  .add-select { padding: 10px 8px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 12.5px; font-family: inherit; }
+  .add-btn { flex-shrink: 0; background: var(--ember); color: #fff; border: none; border-radius: 10px; padding: 10px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+  .add-btn:disabled { opacity: .4; cursor: default; }
+
+  footer { text-align: center; font-size: 11.5px; color: var(--muted); padding: 40px 20px 0; }
+  a { color: inherit; }
+  @media (max-width: 420px) { .weather { flex-direction: column; align-items: flex-start; } }
+  @media (max-width: 360px) { .add-row { flex-wrap: wrap; } .add-select { flex: 1; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Family Camping Trip</div>
+    <h1>태안 오션블루스 캠핑장<br>1박 2일</h1>
+    <div class="trip-meta">
+      <span>📅 <b>2026. 10. 8(목) ~ 10. 9(금)</b></span>
+      <span>📍 <b>태안 오션블루스 · 카라반 2동</b></span>
+      <span>👨‍👩‍👧 총 <b>7명</b></span>
+    </div>
+    <div class="fam-row">
+      <span class="fam-pill"><span class="dot suahne"></span>수아네 가족 · 3명(7세)</span>
+      <span class="fam-pill"><span class="dot jaeine"></span>재이네 가족 · 4명(6세·2세)</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="weather">
+      <div class="weather-icon">🌤️</div>
+      <div style="flex:1">
+        <div class="weather-days">
+          <div class="weather-day"><div class="wd-label">10/8(목)</div><div class="wd-temp">낮 23° · 밤 14°</div></div>
+          <div class="weather-day"><div class="wd-label">10/9(금)</div><div class="wd-temp">구름 많고 선선</div></div>
+        </div>
+        <div class="weather-note">일교차가 꽤 큽니다 — 밤엔 쌀쌀하니 겉옷·핫팩 챙기세요. (출발 전 기상청 예보로 최종 확인 권장)</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="provided-card">
+      <h3>🚐 카라반에 이미 다 있어요</h3>
+      <p>오션블루스 홈페이지 기준으로 아래가 기본 제공됩니다 — 그래서 텐트·침구·취사도구·세면용품은 준비물에서 뺐어요.</p>
+      <div class="provided-grid">
+        <div class="provided-item">🛏️ 침대·호텔식 침구</div>
+        <div class="provided-item">❄️ 냉장고 · 에어컨</div>
+        <div class="provided-item">🍳 전기밥솥·전자렌지·핫플레이트</div>
+        <div class="provided-item">🍽️ 주방용품·식기 일체</div>
+        <div class="provided-item">🧴 수건·드라이기·샴푸 등 세면용품</div>
+        <div class="provided-item">🪑 식탁·소파</div>
+        <div class="provided-item">🔥 개별 바비큐장(우천시도 가능)</div>
+      </div>
+      <p class="provided-warn">⚠️ <b>숯불 세트(그릴+숯+장갑)는 4인 기준 3만원 현장 신청제</b>로 안내돼 있어요 — 예약 시 이미 포함됐는지 한번 확인해보세요. 주말엔 3만원 추가 시 조개구이·해물라면 중 선택도 가능, 불멍(마시멜로 등)은 2만원이에요.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>일정 동선</h2></div>
+    <p class="sec-sub">체크인 15:00 / 체크아웃 11:00 기준 제안 일정 — 출발 시간에 맞춰 조정하세요</p>
+    <div class="day-tabs">
+      <div class="day-tab active" data-day="1" onclick="showDay(1)">10/8(목) · 1일차</div>
+      <div class="day-tab" data-day="2" onclick="showDay(2)">10/9(금) · 2일차</div>
+    </div>
+    <div class="timeline active" data-day="1">
+      <div class="tl-item"><div class="tl-time">오전</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">각자 출발 준비 &amp; 장보기</div>
+        <div class="tl-desc">각자 집 근처에서 고기·오뎅탕·밀키트 장보기. 생수·음료처럼 부피 큰 건 경유지에서 만나 공동구매 추천.</div></div></div>
+      <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">태안 도착 · 주변 둘러보기</div>
+        <div class="tl-desc">체크인 전 여유 있게 도착해 근처 해변 산책이나 점심. (예: 꽃지해수욕장 방향)</div></div></div>
+      <div class="tl-item"><div class="tl-time">15:00</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">카라반 체크인 · 짐 정리</div>
+        <div class="tl-desc">텐트 설치 없이 바로 체크인 — 짐만 옮기면 끝. 숯불세트 포함 여부 프런트에서 확인.</div>
+        <span class="tl-tag">두 가족 함께</span></div></div>
+      <div class="tl-item"><div class="tl-time">16:00</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">해변 산책 · 일몰 / (선택)인피니티풀</div>
+        <div class="tl-desc">태안 서해안 일몰 포인트 산책. 아이들과 가볍게 걷기 좋은 시간.</div></div></div>
+      <div class="tl-item"><div class="tl-time">17:30</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">저녁 준비 — 고기 + 오뎅탕 + 밀키트</div>
+        <div class="tl-desc">그릴은 비치돼 있으니 재료만 준비. 아이들용 오뎅탕 먼저 끓여두면 기다리는 동안 덜 보채요.</div></div></div>
+      <div class="tl-item"><div class="tl-time">19:00</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">저녁식사</div></div></div>
+      <div class="tl-item"><div class="tl-time">20:00</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">불멍(선택, 2만원) · 아이들 놀이 · 친교</div>
+        <div class="tl-desc">밤엔 쌀쌀하니 겉옷·핫팩 챙기기. 2세는 일찍 재워야 할 수 있어 교대로.</div></div></div>
+      <div class="tl-item"><div class="tl-time">21:30</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">아이들 취침 준비</div></div></div>
+    </div>
+    <div class="timeline" data-day="2">
+      <div class="tl-item"><div class="tl-time">07:30</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">기상 · 아침식사</div></div></div>
+      <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">짐 정리</div><div class="tl-desc">카라반이라 철수 부담 없음 — 가져온 짐만 챙기면 끝.</div></div></div>
+      <div class="tl-item"><div class="tl-time">11:00</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">체크아웃</div></div></div>
+      <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-dot"></div>
+        <div class="tl-body"><div class="tl-title">(선택) 귀가 전 주변 관광</div>
+        <div class="tl-desc">신두리 해안사구 / 천리포수목원 등 — 아이들 컨디션 보고 결정.</div>
+        <span class="tl-tag">선택사항</span></div></div>
+      <div class="tl-item"><div class="tl-time">오후</div><div class="tl-dot"></div><div class="tl-body"><div class="tl-title">각자 귀가</div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>준비물 체크리스트</h2></div>
+    <p class="sec-sub">캠핑 장비·침구·취사도구·세면용품은 카라반에 다 있어 뺐습니다. 체크하거나 새 항목을 추가하면 두 가족 모두에게 실시간으로 반영돼요.</p>
+    <div id="sync-banner"></div>
+    <div class="progress-wrap">
+      <div class="progress-row"><span>전체 준비 현황</span><span id="progress-label">0 / 0</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" data-f="all" onclick="setFilter('all')">전체</button>
+      <button class="filter-btn" data-f="suahne" onclick="setFilter('suahne')">수아네</button>
+      <button class="filter-btn" data-f="jaeine" onclick="setFilter('jaeine')">재이네</button>
+      <button class="filter-btn" data-f="gongdong" onclick="setFilter('gongdong')">공동구매</button>
+    </div>
+    <div id="checklist"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>장보기 어떻게 할까요</h2></div>
+    <div class="note-card">
+      <h3>🛒 기본은 각자, 음료·얼음은 만나서</h3>
+      <p>캠핑장비가 빠지니 장볼 게 많지 않아요. 고기·오뎅탕·밀키트는 각자 미리 준비하고, 아래처럼 부피 크거나 당일 구매가 나은 것만 태안 가는 길 경유지에서 만나 같이 사는 걸 추천해요.</p>
+      <ul>
+        <li>생수·음료 (부피 큼 — 나눠서 트렁크에)</li>
+        <li>얼음 (당일 구매가 신선 — 카라반에 냉장고 있어 아이스박스는 선택)</li>
+        <li>깜빡하고 빠뜨린 재료 보충용 여유분</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    태안 오션블루스 캠핑장 1박2일 · 수아네 &amp; 재이네 가족<br>
+    체크/추가 내용은 두 가족 모두에게 공유됩니다 · 날씨는 사전 예보이니 출발 전 재확인하세요
+  </footer>
+</div>
+
+<script>
+  // ── Firebase Realtime Database REST API를 순수 fetch()로 폴링.
+  // (JS SDK의 웹소켓 채널이 일부 통신사/인앱브라우저 네트워크에서 막히는 걸
+  // 확인해서, 더 범용적으로 통하는 일반 HTTPS 요청 방식으로 전환함.)
+  const DB_URL = 'https://travel-plan-dad8f-default-rtdb.firebaseio.com/checklist.json';
+  const POLL_MS = 4000;
+
+  const DEFAULT_DATA = {"categories":[{"id":"c1","name":"🥩 저녁 메뉴 — 고기 + 오뎅탕 + 밀키트","items":[{"id":1,"n":"바베큐용 고기","tag":"jaeine","checked":false},{"id":2,"n":"오뎅탕 재료(오뎅·무·대파·육수팩)","tag":"suahne","checked":false},{"id":3,"n":"어른용 밀키트(찌개·안주류)","tag":"suahne","checked":false},{"id":4,"n":"쌈채소 · 쌈장 · 기름장","tag":"jaeine","checked":false},{"id":5,"n":"고기 양념(선택)","tag":"gakja","checked":false}]},{"id":"c2","name":"🍚 그 외 식사","items":[{"id":6,"n":"다음날 아침식사(즉석밥·국·반찬 등)","tag":"suahne","checked":false},{"id":7,"n":"아이 간식 · 과자","tag":"gakja","checked":false},{"id":8,"n":"생수 · 음료","tag":"gongdong","checked":false},{"id":9,"n":"얼음(당일 구매)","tag":"gongdong","checked":false},{"id":10,"n":"어른용 주류(선택)","tag":"gongdong","checked":false}]},{"id":"c3","name":"🍼 아이 용품 (7세·6세·2세)","items":[{"id":11,"n":"기저귀 · 물티슈(2세용)","tag":"jaeine","checked":false},{"id":12,"n":"유아용 식기 · 빨대컵","tag":"gakja","checked":false},{"id":13,"n":"아이 여벌옷","tag":"gakja","checked":false},{"id":14,"n":"아이 놀거리(모래놀이 등)","tag":"gakja","checked":false},{"id":15,"n":"구급약 상비함(공용)","tag":"suahne","checked":false},{"id":16,"n":"모기 · 벌레 기피제","tag":"gakja","checked":false}]},{"id":"c4","name":"🎒 개인 준비물","items":[{"id":17,"n":"저녁용 겉옷 · 핫팩(일교차 대비)","tag":"gakja","checked":false},{"id":18,"n":"우비(날씨 변동 대비)","tag":"gakja","checked":false},{"id":19,"n":"선크림","tag":"gakja","checked":false},{"id":20,"n":"보조배터리 · 충전기","tag":"gakja","checked":false},{"id":21,"n":"쓰레기봉투(여분)","tag":"suahne","checked":false}]},{"id":"c5","name":"➕ 생각나서 추가한 것","items":[]}],"nextId":22};
+
+  const TAG_LABEL = { suahne: '수아네', jaeine: '재이네', gongdong: '공동구매', gakja: '각자' };
+  let curFilter = 'all';
+  let DATA = null;
+  let connected = false;
+  let pulling = false;
+  let lastDataJson = null; // 직전에 화면에 그린 데이터 — 바뀐 게 없으면 다시 안 그림(입력 중인 폼 보존)
+
+  // Firebase RTDB는 빈 배열/객체를 저장하면 그 필드 자체를 지워버려서
+  // (읽으면 null) 돌아온다 — categories/items가 항상 배열이도록 보정.
+  function normalize(data) {
+    data.categories = (data.categories || []).map(cat => ({ ...cat, items: cat.items || [] }));
+    return data;
+  }
+
+  async function pull() {
+    if (pulling) return; // 이전 폴링이 아직 안 끝났으면 건너뜀
+    pulling = true;
+    const wasConnected = connected;
+    try {
+      const res = await fetch(DB_URL, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const val = await res.json();
+      let next;
+      if (val) {
+        next = normalize(val);
+      } else if (!DATA) {
+        next = normalize(DEFAULT_DATA);
+      }
+      connected = true;
+      if (next) {
+        const nextJson = JSON.stringify(next);
+        if (nextJson !== lastDataJson) {
+          DATA = next;
+          lastDataJson = nextJson;
+          render(); // 서버 쪽 내용이 실제로 바뀐 경우에만 전체 다시 그림
+          if (!val) await push(); // 첫 방문자가 초기 리스트로 시딩
+        } else if (!wasConnected) {
+          renderSyncBanner(); // 내용은 그대로, 연결 상태만 복구된 경우
+        }
+      }
+    } catch (e) {
+      connected = false;
+      if (wasConnected) renderSyncBanner();
+    }
+    pulling = false;
+  }
+
+  async function push() {
+    try {
+      await fetch(DB_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(DATA)
+      });
+      connected = true;
+    } catch (e) {
+      connected = false;
+      alert('저장에 실패했어요: ' + (e && e.message ? e.message : '알 수 없는 오류') + ' — 다시 시도해주세요.');
+    }
+  }
+
+  pull();
+  setInterval(pull, POLL_MS);
+
+  function render() {
+    const root = document.getElementById('checklist');
+    renderSyncBanner();
+    if (!DATA) { root.innerHTML = '<div style="font-size:13px;color:var(--muted);padding:8px 2px">불러오는 중...</div>'; return; }
+    let totalCount = 0, doneCount = 0;
+    root.innerHTML = DATA.categories.map(cat => {
+      const rows = cat.items.map(it => {
+        totalCount++;
+        if (it.checked) doneCount++;
+        if (curFilter !== 'all' && it.tag !== curFilter) return '';
+        const delBtn = cat.id === 'c5' ? `<button class="del-btn" onclick="event.stopPropagation();removeItem(${it.id})">✕</button>` : '';
+        return `<div class="item ${it.checked?'checked':''}" onclick="toggle(${it.id})">
+          <div class="chk">${it.checked?'✓':''}</div>
+          <div class="item-name">${esc(it.n)}</div>
+          <span class="tag ${it.tag}">${TAG_LABEL[it.tag]}</span>
+          ${delBtn}
+        </div>`;
+      }).join('');
+      const addRow = cat.id === 'c5' ? `
+        <div class="add-row">
+          <input class="add-input" id="add-input" type="text" placeholder="생각난 준비물 입력..." maxlength="40">
+          <select class="add-select" id="add-tag">
+            <option value="suahne">수아네</option>
+            <option value="jaeine">재이네</option>
+            <option value="gongdong">공동구매</option>
+            <option value="gakja" selected>각자</option>
+          </select>
+          <button class="add-btn" id="add-btn" onclick="addItem()">+ 추가</button>
+        </div>` : '';
+      if (!rows.trim() && cat.id !== 'c5') return '';
+      return `<div class="cat-block">
+        <div class="cat-title">${cat.name}</div>
+        ${rows.trim() ? `<div class="item-list">${rows}</div>` : (cat.id==='c5' ? '<div style="font-size:12.5px;color:var(--muted);padding:2px 2px 8px">아직 없어요 — 아래에서 추가해보세요</div>' : '')}
+        ${addRow}
+      </div>`;
+    }).join('');
+    document.getElementById('progress-label').textContent = `${doneCount} / ${totalCount}`;
+    document.getElementById('progress-fill').style.width = (totalCount? doneCount/totalCount*100:0) + '%';
+  }
+
+  function renderSyncBanner() {
+    const el = document.getElementById('sync-banner');
+    if (!connected) {
+      el.innerHTML = `<div class="sync-banner offline">연결 중...</div>`;
+    } else {
+      el.innerHTML = `<div class="sync-banner live"><span class="pulse-dot"></span>두 가족에게 자동으로 동기화되고 있어요 (몇 초 내 반영)</div>`;
+    }
+  }
+
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function toggle(id) {
+    for (const cat of DATA.categories) {
+      const it = cat.items.find(x => x.id === id);
+      if (it) { it.checked = !it.checked; break; }
+    }
+    render();
+    lastDataJson = JSON.stringify(DATA); // 폴링이 같은 내용을 "변경"으로 오인해 다시 그리는 것 방지
+    push();
+  }
+
+  function removeItem(id) {
+    for (const cat of DATA.categories) {
+      const idx = cat.items.findIndex(x => x.id === id);
+      if (idx !== -1) { cat.items.splice(idx, 1); break; }
+    }
+    render();
+    lastDataJson = JSON.stringify(DATA);
+    push();
+  }
+
+  function addItem() {
+    const input = document.getElementById('add-input');
+    const sel = document.getElementById('add-tag');
+    const name = (input.value || '').trim();
+    if (!name) { input.focus(); return; }
+    const c5 = DATA.categories.find(c => c.id === 'c5');
+    c5.items.push({ id: DATA.nextId++, n: name, tag: sel.value, checked: false });
+    render();
+    lastDataJson = JSON.stringify(DATA);
+    push();
+  }
+
+  function setFilter(f) {
+    curFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.f === f));
+    render();
+  }
+
+  function showDay(d) {
+    document.querySelectorAll('.day-tab').forEach(t => t.classList.toggle('active', +t.dataset.day === d));
+    document.querySelectorAll('.timeline').forEach(t => t.classList.toggle('active', +t.dataset.day === d));
+  }
+
+  render(); // DATA 로드 전엔 "불러오는 중" 표시 — pull()이 끝나면 재렌더링됨
+</script>
+</body>
+</html>
