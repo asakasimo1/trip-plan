@@ -234,6 +234,12 @@
     .bottom-sheet { display: block; }
   }
 </style>
+<link rel="manifest" href="/trip-plan/manifest.webmanifest">
+<meta name="theme-color" content="#1e3a5f">
+<link rel="apple-touch-icon" href="/trip-plan/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="여행플랜">
 </head>
 <body>
 
@@ -545,5 +551,6 @@ renderMarkers();
 renderLegend();
 map.fitBounds(L.latLngBounds(LOCATIONS.map(l => [l.lat, l.lng])), { padding: [30, 30] });
 </script>
+<script>if ('serviceWorker' in navigator) { addEventListener('load', function () { navigator.serviceWorker.register('/trip-plan/sw.js', { scope: '/trip-plan/' }).catch(function () {}); }); }</script>
 </body>
 </html>

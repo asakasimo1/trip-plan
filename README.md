@@ -37,6 +37,15 @@ trip-plan/
 - 삿포로: https://asakasimo1.github.io/trip-plan/sapporo/sapporo_family_trip.html
 - 하이원: https://asakasimo1.github.io/trip-plan/high-one/high_one_family_trip.html
 
+## 📲 앱처럼 설치 (PWA)
+GitHub Pages(HTTPS)에서 서비스되는 웹앱이라 스토어 없이 홈 화면에 설치된다. Vercel은 쓰지 않는다.
+- 갤럭시: Chrome으로 허브를 열고 첫 화면의 **앱으로 설치** 버튼(없으면 메뉴 ⋮ → 앱 설치/홈 화면에 추가)
+- 아이폰: **Safari**로 열고 공유(⬆︎) → **홈 화면에 추가**
+- 구성: `manifest.webmanifest`(앱 이름·아이콘), `sw.js`(오프라인 캐시: 같은 사이트 파일은 네트워크 우선→실패 시 캐시), `icons/`
+- 오프라인: 일정표·쇼핑목록·사진은 열림, 구글 지도·OSM 타일은 인터넷 필요. 설치 전/후에 온라인에서 각 페이지를 한 번씩 열어 두면 확실하다.
+- 새 파일을 추가하면 `sw.js`의 `CORE` 목록에 넣고 `VERSION`을 바꾼다(안 넣어도 방문 시 자동 캐시됨).
+- 기기 저장 값(콜밴 번호·쇼핑 체크)은 기기별/브라우저별이다. 아이폰은 설치한 앱이 Safari와 저장소가 따로라서 앱 안에서 다시 입력해야 한다.
+
 ## 이력
 
 - 이 저장소는 예전 `trip-sapporo` 저장소의 커밋 이력을 병합해 가지고 있다. 당시 최종 커밋은 태그 `trip-sapporo-final`.

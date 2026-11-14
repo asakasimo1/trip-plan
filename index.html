@@ -32,8 +32,18 @@
   .btn.alt { background: linear-gradient(90deg, #f97316, #fb923c); }
   .btn:hover { opacity: .88; }
   .pending { margin-top: 16px; font-size: 13px; color: var(--sub); background: var(--chip); border-radius: 12px; padding: 11px 12px; text-align: center; }
+  .install { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28); color: #fff; border-radius: 16px; padding: 14px 16px; margin-bottom: 18px; font-size: 13px; line-height: 1.6; }
+  .install b { font-weight: 800; }
+  .install button { margin-top: 8px; border: 0; border-radius: 10px; padding: 9px 16px; font-size: 14px; font-weight: 800; color: #1e3a5f; background: #fff; cursor: pointer; font-family: inherit; }
+  .install .ios { margin-top: 6px; opacity: .92; font-size: 12.5px; }
   .empty { color: #fff; text-align: center; font-size: 14px; padding: 24px; }
 </style>
+<link rel="manifest" href="/trip-plan/manifest.webmanifest">
+<meta name="theme-color" content="#1e3a5f">
+<link rel="apple-touch-icon" href="/trip-plan/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="여행플랜">
 </head>
 <body>
 <div class="wrap">
@@ -41,6 +51,11 @@
     <h1>🧳 우리 가족 여행 플랜</h1>
     <p>다가오는 여행과 지난 여행을 한곳에서</p>
   </header>
+  <div class="install" id="install" hidden>
+    <b>📲 앱처럼 설치해서 쓰기</b> — 홈 화면 아이콘으로 열고, 인터넷이 없어도 일정표·쇼핑목록을 볼 수 있어요(지도는 인터넷 필요).
+    <div><button type="button" id="installBtn" hidden>앱으로 설치</button></div>
+    <div class="ios" id="iosHint" hidden>아이폰: <b>Safari</b>에서 열고 공유 버튼(⬆︎) → <b>홈 화면에 추가</b>. 갤럭시에서 버튼이 안 보이면 Chrome 메뉴(⋮) → <b>앱 설치</b> 또는 <b>홈 화면에 추가</b>.</div>
+  </div>
   <main id="list"><p class="empty">불러오는 중…</p></main>
 </div>
 <script>
@@ -99,5 +114,17 @@
   });
 })();
 </script>
+<script>
+(function () {
+  var box = document.getElementById('install'), btn = document.getElementById('installBtn'), ios = document.getElementById('iosHint'), deferred = null;
+  var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  if (standalone) return;                 // 이미 앱으로 열었으면 안내 숨김
+  box.hidden = false; ios.hidden = false;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; btn.hidden = false; });
+  btn.addEventListener('click', function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; btn.hidden = true; }); });
+  window.addEventListener('appinstalled', function () { box.hidden = true; });
+})();
+</script>
+<script>if ('serviceWorker' in navigator) { addEventListener('load', function () { navigator.serviceWorker.register('/trip-plan/sw.js', { scope: '/trip-plan/' }).catch(function () {}); }); }</script>
 </body>
 </html>

@@ -165,6 +165,12 @@
   .m { display: inline-block; font-size: 10.5px; font-weight: 700; border-radius: 6px; padding: 1px 7px; margin-right: 4px; background: #f1f5f9; color: #475569; }
   .nav-row a { flex: 1; text-align: center; background: white; color: #1e3a5f; font-size: 13px; font-weight: 800; border-radius: 12px; padding: 11px 6px; text-decoration: none; box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
 </style>
+<link rel="manifest" href="/trip-plan/manifest.webmanifest">
+<meta name="theme-color" content="#1e3a5f">
+<link rel="apple-touch-icon" href="/trip-plan/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="여행플랜">
 </head>
 <body>
 
@@ -779,5 +785,6 @@
   });
 </script>
 
+<script>if ('serviceWorker' in navigator) { addEventListener('load', function () { navigator.serviceWorker.register('/trip-plan/sw.js', { scope: '/trip-plan/' }).catch(function () {}); }); }</script>
 </body>
 </html>

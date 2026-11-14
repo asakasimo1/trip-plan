@@ -40,6 +40,12 @@
   .spot p { font-size: 12px; color: #1e293b; line-height: 1.6; font-weight: 500; }
   @media (max-width: 360px) { .spots { grid-template-columns: 1fr; } }
 </style>
+<link rel="manifest" href="/trip-plan/manifest.webmanifest">
+<meta name="theme-color" content="#1e3a5f">
+<link rel="apple-touch-icon" href="/trip-plan/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="여행플랜">
 </head>
 <body>
 <div class="hero">
@@ -128,5 +134,6 @@
     .catch(function () { render(); });
 })();
 </script>
+<script>if ('serviceWorker' in navigator) { addEventListener('load', function () { navigator.serviceWorker.register('/trip-plan/sw.js', { scope: '/trip-plan/' }).catch(function () {}); }); }</script>
 </body>
 </html>
