@@ -17,7 +17,8 @@
 후보를 바꾸려면 데이터 원본 한 곳(`locations.js`의 `pick_*` 항목)과 일정표의 후보 카드를 함께 고친다.
 
 ## 🛍️ 쇼핑목록 추가
-`shopping.json`의 `items`에 `{ "id": "1", "name": "…", "where": "…", "qty": "…", "for": "…", "note": "…" }` 형식으로 추가(`name`만 필수, 가격은 `price`, 사진은 `photo`에 `shopping-photos/…jpg` 경로). 사진은 올리기 전에 위치·촬영정보를 지우고 가로 820px 안팎으로 줄인다. 체크 표시와 화면에서 직접 적은 항목은 각자 기기(브라우저)에만 저장된다.
+화면 입력칸에서 적은 항목과 체크 표시는 taean-camping과 같은 Firebase Realtime Database(`…/fukuoka-shopping`, REST 폴링 5초)에 저장돼 **가족 모두에게 공유**된다(✕ 삭제도 공유). 오프라인 등으로 못 올린 항목은 그 기기에 임시로 두었다가 연결되면 자동 업로드. 사진·가격이 필요한 항목은 `shopping.json`의 `items`에 `{ "id": "…", "name": "…", "photo": "shopping-photos/…jpg", … }`로 추가(`name`만 필수). 사진은 올리기 전에 위치·촬영정보를 지우고 가로 820px 안팎으로 줄인다.
+※ DB 보안 규칙에서 `fukuoka-shopping` 경로의 읽기·쓰기가 허용돼 있어야 한다(막혀 있으면 화면에 "연결 안 됨" 표시).
 
 ## 🗺️ 구글 내 지도(My Maps)로 가져오기
 ※ 이미 만들어 공유함: https://www.google.com/maps/d/viewer?mid=15WOosCb-NuJpVjpzObgiSXqQoXHo4g8 (일정표·지도 페이지의 「📌 내 지도」 버튼). 일정이 바뀌면 이 지도의 항목도 함께 고쳐야 한다.

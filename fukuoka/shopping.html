@@ -69,7 +69,8 @@
       <input type="text" id="where" placeholder="어디서 (선택)" maxlength="30" autocomplete="off">
       <button type="submit">추가</button>
     </form>
-    <p class="hint">여기서 추가한 항목은 <b>이 기기(이 브라우저)에만</b> 저장돼요(주황 "이 기기" 표시). 가족 모두가 보게 하려면 Claude에게 "쇼핑목록에 ○○ 추가"라고 말해 주세요 — <code>shopping.json</code>에 반영하면 모든 기기에 보입니다.</p>
+    <p class="hint" id="sync">연결 중…</p>
+    <p class="hint">여기서 적은 항목과 체크 표시는 <b>이 페이지를 여는 가족 모두에게 같이</b> 보여요(몇 초마다 자동 갱신). ✕로 지우면 모두에게서 지워져요.</p>
   </div>
 
   <p class="section-title">📍 일정 중 쇼핑하기 좋은 곳</p>
@@ -83,19 +84,38 @@
 
 <script>
 (function () {
+  // 추가한 항목·체크 표시는 taean-camping과 같은 Firebase Realtime Database(REST)에 두어 가족 모두가 본다.
+  // 저장 실패(오프라인 등)한 새 항목은 이 기기에 임시로 남겨 두었다가 연결되면 자동으로 올린다.
+  var DB = 'https://travel-plan-dad8f-default-rtdb.firebaseio.com/fukuoka-shopping';
+  var POLL_MS = 5000;
   var KEY = 'fukuoka-shopping-v1';
-  var shared = [], store = { done: {}, local: [] };
+  var shared = [], remote = { items: {}, done: {} }, connected = false, pulling = false, lastJson = null;
+  var store = { done: {}, local: [] };
   try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done && s.local) store = s; } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function api(path, method, body) {
+    return fetch(DB + path + '.json', { method: method || 'GET', cache: 'no-store',
+      headers: body !== undefined ? { 'Content-Type': 'application/json' } : undefined,
+      body: body !== undefined ? JSON.stringify(body) : undefined })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+  }
+  function isDone(key) { return !!(remote.done[key] || store.done[key]); }
 
-  function row(it, isLocal) {
-    var id = (isLocal ? 'l:' : 's:') + it.id;
-    var r = el('div', 'item' + (store.done[id] ? ' done' : ''));
-    var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!store.done[id];
-    cb.addEventListener('change', function () { store.done[id] = cb.checked; if (!cb.checked) delete store.done[id]; save(); render(); });
+  function row(it, kind) { // kind: 's' 파일 항목 / 'd' 공유 DB 항목 / 'l' 아직 못 올린 이 기기 항목
+    var key = kind + ':' + it.id;
+    var d0 = isDone(key);
+    var r = el('div', 'item' + (d0 ? ' done' : ''));
+    var cb = el('input'); cb.type = 'checkbox'; cb.checked = d0;
+    cb.addEventListener('change', function () {
+      var v = cb.checked;
+      if (kind === 'l') { if (v) store.done[key] = true; else delete store.done[key]; save(); render(); return; }
+      if (v) remote.done[key] = true; else delete remote.done[key];
+      render();
+      api('/done/' + encodeURIComponent(key), v ? 'PUT' : 'DELETE', v ? true : undefined).catch(function () { connected = false; banner(); });
+    });
     var box = el('div', 'body'); var nm = el('div', 'name', it.name);
-    if (isLocal) nm.appendChild(el('span', 'chip local', '이 기기'));
+    if (kind === 'l') nm.appendChild(el('span', 'chip local', '올리는 중·이 기기'));
     box.appendChild(nm);
     if (it.price) box.appendChild(el('div', 'price', it.price));
     var meta = [it.where && ('📍 ' + it.where), it.qty && ('수량 ' + it.qty), it.for && ('👤 ' + it.for), it.note].filter(Boolean).join(' · ');
@@ -107,10 +127,13 @@
       a.appendChild(im); r.appendChild(a);
     }
     r.appendChild(box);
-    if (isLocal) {
+    if (kind !== 's') {
       var d = el('button', 'del', '✕'); d.type = 'button'; d.title = '삭제';
       d.addEventListener('click', function () {
-        store.local = store.local.filter(function (x) { return x.id !== it.id; }); delete store.done[id]; save(); render();
+        if (kind === 'l') { store.local = store.local.filter(function (x) { return x.id !== it.id; }); delete store.done[key]; save(); render(); return; }
+        delete remote.items[it.id]; delete remote.done[key]; render();
+        api('/items/' + encodeURIComponent(it.id), 'DELETE').catch(function () {});
+        api('/done/' + encodeURIComponent(key), 'DELETE').catch(function () {});
       });
       r.appendChild(d);
     }
@@ -118,11 +141,47 @@
   }
   function render() {
     var list = document.getElementById('list'); list.textContent = '';
-    var all = shared.map(function (i) { return [i, false]; }).concat(store.local.map(function (i) { return [i, true]; }));
-    if (!all.length) list.appendChild(el('div', 'empty', '아직 비어 있어요. 생각날 때마다 아래에 적거나 Claude에게 추가를 요청하세요.'));
+    var ds = Object.keys(remote.items).map(function (k) { return remote.items[k]; })
+      .sort(function (a, b) { return (a.at || 0) - (b.at || 0); });
+    var all = shared.map(function (i) { return [i, 's']; })
+      .concat(ds.map(function (i) { return [i, 'd']; }))
+      .concat(store.local.map(function (i) { return [i, 'l']; }));
+    if (!all.length) list.appendChild(el('div', 'empty', '아직 비어 있어요. 생각날 때마다 아래에 적어 주세요.'));
     all.forEach(function (p) { list.appendChild(row(p[0], p[1])); });
-    var done = all.filter(function (p) { return store.done[(p[1] ? 'l:' : 's:') + p[0].id]; }).length;
+    var done = all.filter(function (p) { return isDone(p[1] + ':' + p[0].id); }).length;
     document.getElementById('progress').textContent = all.length ? ('구매 ' + done + ' / ' + all.length) : '';
+    banner();
+  }
+  function banner() {
+    var b = document.getElementById('sync'); if (!b) return;
+    b.textContent = connected ? '🟢 가족 모두와 공유 중' : '⚪ 연결 안 됨 — 새로 적은 항목은 이 기기에 두었다가 연결되면 자동으로 올려요';
+  }
+  function flush() { // 못 올린 항목 올리기
+    var pend = store.local.slice();
+    return pend.reduce(function (p, it) {
+      return p.then(function () {
+        return api('/items/' + encodeURIComponent(it.id), 'PUT', { id: it.id, name: it.name, where: it.where || '', at: Number(it.id) || Date.now() })
+          .then(function () {
+            remote.items[it.id] = { id: it.id, name: it.name, where: it.where || '', at: Number(it.id) || Date.now() };
+            store.local = store.local.filter(function (x) { return x.id !== it.id; });
+            if (store.done['l:' + it.id]) { delete store.done['l:' + it.id]; remote.done['d:' + it.id] = true; api('/done/' + encodeURIComponent('d:' + it.id), 'PUT', true).catch(function () {}); }
+            save();
+          });
+      });
+    }, Promise.resolve());
+  }
+  function pull() {
+    if (pulling) return; pulling = true;
+    api('').then(function (v) {
+      connected = true; v = v || {};
+      remote = { items: v.items || {}, done: v.done || {} };
+      return flush().catch(function () {});
+    }).catch(function () { connected = false; })
+      .then(function () {
+        pulling = false;
+        var j = JSON.stringify([remote, store.local, connected]);
+        if (j !== lastJson) { lastJson = j; render(); }
+      });
   }
   document.getElementById('form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -130,9 +189,12 @@
     var name = n.value.trim(); if (!name) return;
     store.local.push({ id: String(Date.now()), name: name, where: w.value.trim() });
     save(); n.value = ''; w.value = ''; render();
+    pulling = false; pull();
   });
   fetch('shopping.json').then(function (r) { return r.json(); }).then(function (d) { shared = d.items || []; render(); })
-    .catch(function () { render(); });
+    .catch(function () { render(); }).then(pull);
+  setInterval(pull, POLL_MS);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) pull(); });
 })();
 </script>
 <script>if ('serviceWorker' in navigator) { addEventListener('load', function () { navigator.serviceWorker.register('/trip-plan/sw.js', { scope: '/trip-plan/' }).catch(function () {}); }); }</script>

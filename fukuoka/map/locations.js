@@ -97,7 +97,7 @@ const LOCATIONS = [
     tip: "니시테츠 텐진→다자이후 약 30분 / 하카타 버스터미널 직행 약 40분" },
   { id: "teamlab", name: "팀랩 포레스트 (코스 B 오전)", nameJp: "チームラボフォレスト福岡", category: "ACTIVITY",
     lat: 33.5950, lng: 130.3638, day: 5, order: 0, mapQuery: "チームラボフォレスト福岡",
-    desc: "E・ZO 후쿠오카, 페이페이돔 옆. 디지털 아트 체험. 16세 이상 ¥2,400~ · 4-15세 ¥1,000~." },
+    desc: "BOSS E・ZO FUKUOKA 5F(地行浜 2-2-6), 페이페이돔 옆. 디지털 아트 체험. 16세 이상 ¥2,400~ · 4-15세 ¥1,000~." },
   { id: "ohori", name: "오호리공원 · 마이즈루공원 (코스 B)", nameJp: "大濠公園", category: "SPOT",
     lat: 33.5861, lng: 130.3764, day: 5, order: 0, desc: "호수 산책과 단풍, 후쿠오카성터(마이즈루공원)." },
   { id: "fukuoka_tower", name: "후쿠오카타워 · 모모치해변 (코스 B)", nameJp: "福岡タワー", category: "SPOT",
