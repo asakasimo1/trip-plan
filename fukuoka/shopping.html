@@ -33,6 +33,7 @@
   form input[type=text] { flex: 1 1 140px; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
   form button { border: 0; border-radius: 10px; padding: 10px 16px; font-size: 14px; font-weight: 800; color: white; background: linear-gradient(90deg, #2563eb, #60a5fa); cursor: pointer; }
   .hint { font-size: 11.5px; color: #64748b; line-height: 1.6; margin-top: 8px; }
+  .act { display: inline-block; margin-right: 12px; margin-top: 2px; font-size: 12px; font-weight: 700; color: #2563eb; text-decoration: none; cursor: pointer; }
   .del { margin-left: auto; border: 0; background: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 0 4px; }
   .spots { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .spot { background: white; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
@@ -89,6 +90,7 @@
   var DB = 'https://travel-plan-dad8f-default-rtdb.firebaseio.com/checklist/fukuoka';
   var POLL_MS = 5000;
   var KEY = 'fukuoka-shopping-v1';
+  var photoCache = {}, photoLoading = {};
   var shared = [], remote = { items: {}, done: {} }, connected = false, pulling = false, lastJson = null;
   var store = { done: {}, local: [] };
   try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done && s.local) store = s; } catch (e) {}
@@ -99,6 +101,32 @@
       headers: body !== undefined ? { 'Content-Type': 'application/json' } : undefined,
       body: body !== undefined ? JSON.stringify(body) : undefined })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+  }
+  function shrink(file) { // 사진을 가로 480px 안팎 JPEG로 줄여 data URL로
+    return new Promise(function (ok, no) {
+      var fr = new FileReader();
+      fr.onerror = no;
+      fr.onload = function () {
+        var im = new Image(); im.onerror = no;
+        im.onload = function () {
+          var w = Math.min(480, im.width), h = Math.round(im.height * w / im.width);
+          var c = document.createElement('canvas'); c.width = w; c.height = h;
+          c.getContext('2d').drawImage(im, 0, 0, w, h);
+          ok(c.toDataURL('image/jpeg', 0.7));
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+  function attach(it, kind, file) {
+    shrink(file).then(function (url) {
+      if (kind === 'l') { it.photo = url; save(); render(); return; }
+      photoCache[it.id] = url; if (remote.items[it.id]) remote.items[it.id].hasPhoto = true; render();
+      api('/photos/' + encodeURIComponent(it.id), 'PUT', url)
+        .then(function () { return api('/items/' + encodeURIComponent(it.id) + '/hasPhoto', 'PUT', true); })
+        .catch(function () { connected = false; banner(); });
+    }).catch(function () { alert('사진을 불러오지 못했어요. 다른 사진으로 다시 시도해 주세요.'); });
   }
   function isDone(key) { return !!(remote.done[key] || store.done[key]); }
 
@@ -121,10 +149,21 @@
     var meta = [it.where && ('📍 ' + it.where), it.qty && ('수량 ' + it.qty), it.for && ('👤 ' + it.for), it.note].filter(Boolean).join(' · ');
     if (meta) box.appendChild(el('div', 'meta', meta));
     r.appendChild(cb);
-    if (it.photo) {
-      var a = el('a', 'thumb'); a.href = it.photo; a.target = '_blank'; a.rel = 'noopener';
-      var im = el('img'); im.src = it.photo; im.alt = it.name; im.loading = 'lazy';
+    var ph = kind === 'd' ? photoCache[it.id] : it.photo;
+    if (ph) {
+      var a = el('a', 'thumb'); a.href = ph; a.target = '_blank'; a.rel = 'noopener';
+      var im = el('img'); im.src = ph; im.alt = it.name; im.loading = 'lazy';
       a.appendChild(im); r.appendChild(a);
+    }
+    if (kind !== 's' && !ph) {
+      var act = el('div', 'meta');
+      var lab = el('label', 'act', '📷 사진 추가');
+      var fi = el('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.style.display = 'none';
+      fi.addEventListener('change', function () { if (fi.files && fi.files[0]) attach(it, kind, fi.files[0]); });
+      lab.appendChild(fi); act.appendChild(lab);
+      var sr = el('a', 'act', '🔍 이미지 검색'); sr.target = '_blank'; sr.rel = 'noopener';
+      sr.href = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(it.name + ' 일본');
+      act.appendChild(sr); box.appendChild(act);
     }
     r.appendChild(box);
     if (kind !== 's') {
@@ -133,6 +172,7 @@
         if (kind === 'l') { store.local = store.local.filter(function (x) { return x.id !== it.id; }); delete store.done[key]; save(); render(); return; }
         delete remote.items[it.id]; delete remote.done[key]; render();
         api('/items/' + encodeURIComponent(it.id), 'DELETE').catch(function () {});
+        api('/photos/' + encodeURIComponent(it.id), 'DELETE').catch(function () {});
         api('/done/' + encodeURIComponent(key), 'DELETE').catch(function () {});
       });
       r.appendChild(d);
@@ -160,9 +200,11 @@
     var pend = store.local.slice();
     return pend.reduce(function (p, it) {
       return p.then(function () {
-        return api('/items/' + encodeURIComponent(it.id), 'PUT', { id: it.id, name: it.name, where: it.where || '', at: Number(it.id) || Date.now() })
+        return api('/items/' + encodeURIComponent(it.id), 'PUT', { id: it.id, name: it.name, where: it.where || '', at: Number(it.id) || Date.now(), hasPhoto: !!it.photo })
+          .then(function () { return it.photo ? api('/photos/' + encodeURIComponent(it.id), 'PUT', it.photo) : null; })
           .then(function () {
-            remote.items[it.id] = { id: it.id, name: it.name, where: it.where || '', at: Number(it.id) || Date.now() };
+            if (it.photo) photoCache[it.id] = it.photo;
+            remote.items[it.id] = { id: it.id, name: it.name, where: it.where || '', at: Number(it.id) || Date.now(), hasPhoto: !!it.photo };
             store.local = store.local.filter(function (x) { return x.id !== it.id; });
             if (store.done['l:' + it.id]) { delete store.done['l:' + it.id]; remote.done['d:' + it.id] = true; api('/done/' + encodeURIComponent('d:' + it.id), 'PUT', true).catch(function () {}); }
             save();
@@ -175,6 +217,13 @@
     api('').then(function (v) {
       connected = true; v = v || {};
       remote = { items: v.items || {}, done: v.done || {} };
+      Object.keys(remote.items).forEach(function (id) {
+        if (remote.items[id].hasPhoto && !photoCache[id] && !photoLoading[id]) {
+          photoLoading[id] = true;
+          api('/photos/' + encodeURIComponent(id)).then(function (u) { if (u) { photoCache[id] = u; render(); } })
+            .catch(function () {}).then(function () { delete photoLoading[id]; });
+        }
+      });
       return flush().catch(function () {});
     }).catch(function () { connected = false; })
       .then(function () {
