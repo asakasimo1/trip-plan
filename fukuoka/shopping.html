@@ -86,7 +86,7 @@
 (function () {
   // 추가한 항목·체크 표시는 taean-camping과 같은 Firebase Realtime Database(REST)에 두어 가족 모두가 본다.
   // 저장 실패(오프라인 등)한 새 항목은 이 기기에 임시로 남겨 두었다가 연결되면 자동으로 올린다.
-  var DB = 'https://travel-plan-dad8f-default-rtdb.firebaseio.com/fukuoka-shopping';
+  var DB = 'https://travel-plan-dad8f-default-rtdb.firebaseio.com/checklist/fukuoka';
   var POLL_MS = 5000;
   var KEY = 'fukuoka-shopping-v1';
   var shared = [], remote = { items: {}, done: {} }, connected = false, pulling = false, lastJson = null;

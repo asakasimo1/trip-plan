@@ -328,9 +328,10 @@
   async function push() {
     try {
       await fetch(DB_URL, {
-        method: 'PUT',
+        // PATCH로 이 페이지 데이터만 갱신 — 같은 경로 아래 fukuoka(후쿠오카 쇼핑목록 공유 데이터)를 지우지 않기 위함
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(DATA)
+        body: JSON.stringify({ categories: DATA.categories, nextId: DATA.nextId })
       });
       connected = true;
     } catch (e) {
