@@ -94,6 +94,9 @@ const LOCATIONS = [
     desc: "수아를 위한 하이라이트! 마리오 굿즈 직영 스토어. JR하카타역 직결, 10:00-20:00, 입장 무료.",
     tip: "주말·혼잡일엔 정리권. 수요일 오후라 비교적 여유" },
 
+  { id: "canal", name: "캐널시티 하카타 (오후~저녁)", nameJp: "キャナルシティ博多", category: "SHOPPING",
+    lat: 33.5895, lng: 130.4112, day: 4, order: 6, mapQuery: "キャナルシティ博多",
+    desc: "쇼핑몰·분수 쇼 구경과 쇼핑. 나카스·하카타 쪽. 운영시간·이벤트는 방문 전 확인." },
   // ═════════ DAY 5 · 12/3 (목) — 자유일 (팀랩 → 타워 → 캐널시티) ═════════
   { id: "teamlab", name: "팀랩 포레스트 (오전)", nameJp: "チームラボフォレスト福岡", category: "ACTIVITY",
     lat: 33.5950, lng: 130.3638, day: 5, order: 0, mapQuery: "チームラボフォレスト福岡",
@@ -101,9 +104,9 @@ const LOCATIONS = [
   { id: "fukuoka_tower", name: "후쿠오카타워 · 모모치해변 (오후)", nameJp: "福岡タワー", category: "SPOT",
     lat: 33.5933, lng: 130.3515, day: 5, order: 0,
     desc: "해 질 녘 234m 타워 전망대, 타워 앞 크리스마스 마켓(11/20~1/6)." },
-  { id: "canal", name: "캐널시티 하카타 (오후~저녁)", nameJp: "キャナルシティ博多", category: "SHOPPING",
-    lat: 33.5895, lng: 130.4112, day: 5, order: 0, mapQuery: "キャナルシティ博多",
-    desc: "쇼핑몰·분수 쇼 구경과 쇼핑. 나카스·하카타 쪽. 운영시간·이벤트는 방문 전 확인." },
+  { id: "donki", name: "돈키호테 나카스점 (귀갓길 쇼핑)", nameJp: "ドン・キホーテ 中洲店", category: "SHOPPING",
+    lat: 33.5915, lng: 130.4057, day: 5, order: 0, mapQuery: "ドン・キホーテ 中洲店",
+    desc: "모모치에서 호텔로 돌아오는 길에 쇼핑목록 챙기기. 지점·운영시간은 방문 전 확인. 좌표는 근사값." },
   { id: "zoo", name: "후쿠오카시 동식물원 (선택)", nameJp: "福岡市動植物園", category: "ACTIVITY",
     lat: 33.5732, lng: 130.3898, day: 5, order: 0,
     desc: "월요일 휴원이라 목요일 가능. 어른 ¥600, 중학생 미만 무료." },
