@@ -74,6 +74,33 @@
   .stop:last-child .line { display: none; }
 
   .stop-right { flex: 1; padding: 10px 0 10px 6px; }
+
+  /* 교통약자 패스트트랙 상세 */
+  .ft-card { background: white; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); overflow: hidden; border: 1px solid #c7d2fe; }
+  .ft-head { background: linear-gradient(135deg, #4338ca, #6366f1); color: white; padding: 12px 16px; font-size: 14px; font-weight: 800; line-height: 1.4; }
+  .ft-head small { display: block; font-size: 11px; font-weight: 500; opacity: .9; margin-top: 2px; }
+  .ft-body { padding: 12px 16px 14px; font-size: 12px; color: #374151; line-height: 1.65; }
+  .ft-body h5 { font-size: 12.5px; font-weight: 800; color: #4338ca; margin: 12px 0 6px; }
+  .ft-body h5:first-child { margin-top: 0; }
+  .ft-us { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 10px; padding: 8px 12px; }
+  .ft-steps { list-style: none; counter-reset: ft; padding: 0; }
+  .ft-steps li { counter-increment: ft; position: relative; padding: 4px 0 4px 30px; }
+  .ft-steps li::before { content: counter(ft); position: absolute; left: 0; top: 4px; width: 20px; height: 20px; border-radius: 50%; background: #6366f1; color: white; font-size: 11px; font-weight: 800; text-align: center; line-height: 20px; }
+  .ft-tbl { width: 100%; border-collapse: collapse; font-size: 11.5px; margin: 4px 0; }
+  .ft-tbl th, .ft-tbl td { border: 1px solid #e2e8f0; padding: 5px 7px; text-align: left; vertical-align: top; }
+  .ft-tbl th { background: #f1f5f9; color: #475569; font-weight: 700; }
+  .ft-tbl tr.me td { background: #fff7ed; font-weight: 700; }
+  .ft-body details { margin-top: 8px; }
+  .ft-body summary { cursor: pointer; font-weight: 700; color: #475569; }
+
+  /* 현재 시각 하이라이트 (JS가 .now / .next 클래스를 붙임) */
+  .stop.now .stop-right { background: #fff7ed; border-radius: 10px; padding-left: 10px; padding-right: 8px; margin-right: -4px; box-shadow: inset 3px 0 0 #f97316; }
+  .stop.now .stop-time { color: #ea580c; }
+  .stop.now .stop-time::before { content: "● 지금  "; font-weight: 800; color: #ea580c; }
+  .stop.now .dot { border-color: #f97316; background: #f97316; box-shadow: 0 0 0 0 rgba(249,115,22,.5); animation: nowpulse 1.6s infinite; }
+  .stop.next .stop-time::after { content: "  · 다음"; font-weight: 700; color: #0ea5e9; }
+  @keyframes nowpulse { 0% { box-shadow: 0 0 0 0 rgba(249,115,22,.55); } 70% { box-shadow: 0 0 0 9px rgba(249,115,22,0); } 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); } }
+  @media (prefers-reduced-motion: reduce) { .stop.now .dot { animation: none; } }
   .stop-time { font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 2px; }
   .stop-name { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
   .stop-name .tag { font-size: 10px; font-weight: 700; border-radius: 6px; padding: 1px 7px; margin-left: 5px; vertical-align: middle; }
@@ -209,6 +236,7 @@
     <h4>DAY 1 · 인천 → 오이타 → 벳푸 (11/29 일)</h4>
     <div class="transport-row"><span class="t-time">05:30</span><span class="t-arrow">→</span> 🚐 집 출발 (콜밴)</div>
     <div class="transport-row"><span class="t-time">06:30</span><span class="t-arrow">→</span> 인천공항 T2 도착 (출발 09:15까지 2시간 45분)</div>
+    <div class="transport-row"><span class="t-time">체크인 후</span><span class="t-arrow">→</span> 🛂 <b>교통약자 우대출구</b>(3층 1D·2A 출국장)로 보안검색 — 만 7세 미만 수아 + 동반 최대 3인, 여권 제시</div>
     <div class="transport-row"><span class="t-time">09:15</span><span class="t-arrow">→</span> ✈️ 인천 T2 출발 KE2177 (1시간 35분)</div>
     <div class="transport-row"><span class="t-time">10:50</span><span class="t-arrow">→</span> 오이타공항 도착</div>
     <div class="transport-row"><span class="t-time">~11:30</span><span class="t-arrow">→</span> 공항버스 에어라이너 → 벳푸역 12:30경 (51분 · ¥1,500, 초등생 반값)</div>
@@ -247,7 +275,7 @@
     <div class="hotel-banner"><p>🏨 스기노이 호텔 <span>· 1박차 (11/29~11/30)</span></p></div>
     <div class="timeline">
       <div class="tl-group-label lb-transport">✈️ 교통</div>
-      <div class="stop">
+      <div class="stop" data-t="05:30">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">05:30 · 집</div>
@@ -255,7 +283,17 @@
           <div class="stop-desc">집에서 05:30 콜밴 탑승, 인천공항 T2에 06:30 도착(약 1시간). 기사님 연락처는 위쪽 <a href="#driver">🚐 콜밴 연락처</a> 카드에서 바로 전화할 수 있어요. 도착 후 09:15 출발까지 2시간 45분 — 수속·면세점 여유.</div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="07:00">
+        <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
+        <div class="stop-right">
+          <div class="stop-time">체크인 후 · 인천 T2 3층</div>
+          <div class="stop-name">🛂 교통약자 우대출구로 빠르게 보안검색 <span class="tag tag-trs">수아 만 6세 = 대상</span></div>
+          <div class="stop-desc">인천공항 공식 기준 <b>유소아는 만 7세 미만</b>(증빙은 여권)이라 만 6세 수아는 대상이고, 함께 가는 <b>동반인은 최대 3인</b>까지 같이 들어가요(우리 가족 3명 모두).<br>
+            <b>이용 방법</b> ① 체크인 카운터에서 "교통약자 우대출구를 이용하고 싶다"고 확인받기(안내에 따라 '교통약자 우대카드'를 주기도 해요) ② 3층 <b>1D 또는 2A 출국장</b>의 우대출구 입구에서 <b>여권 제시 → 스캔·인증</b> ③ 우대출구로 입장. 운영시간은 출국장과 같아요.<br>
+            <b>⚠️ 확인할 것</b> · 공식 페이지 두 곳의 절차 안내가 달라요(여권만 제시 vs 카운터 확인 후 우대카드) — 체크인 때 직원에게 한 번 물어보세요. 출국심사(법무부)까지 우대되는지는 공식 안내에서 확인하지 못했어요. <b>수아가 11/29 전에 만 7세가 됐다면 대상이 아니에요</b> — 여권의 생년월일 기준. 문의 인천공항 고객센터 1577-2600. <a href="#fasttrack"><b>📋 패스트트랙 상세 안내(출입구·절차) 보기</b></a></div>
+        </div>
+      </div>
+      <div class="stop" data-t="09:15">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">09:15 · 인천 T2</div>
@@ -263,7 +301,7 @@
           <div class="stop-desc">일·월·수·금 운항편이라 일요일 도착과 일치(오이타현 공식 2026 동계 다이아). 비행 1시간 35분.</div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="11:30">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">~11:30 · 오이타공항</div>
@@ -272,7 +310,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-lunch">🍱 점심</div>
-      <div class="stop">
+      <div class="stop" data-t="12:30">
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
@@ -281,7 +319,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-night">🏨 숙소</div>
-      <div class="stop">
+      <div class="stop" data-t="13:00">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">~13:00 · 벳푸역 서쪽 출구</div>
@@ -289,7 +327,7 @@
           <div class="stop-desc">일요일 기준, 역발 막차 20:40. 28인승 선착순·예약 불필요. 승차장은 호텔 후지요시 주차장, 역 B통로 '스기노이 웰컴 라운지'(9:00-17:00)에서 기다려도 돼요.</div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="15:00">
         <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">15:00 · 스기노이 호텔</div>
@@ -311,7 +349,7 @@
     <div class="hotel-banner"><p>🏨 스기노이 호텔 <span>· 2박차 (11/30~12/1)</span></p></div>
     <div class="timeline">
       <div class="tl-group-label lb-activity">🏊 오전 — 호텔에서</div>
-      <div class="stop">
+      <div class="stop" data-t="09:00">
         <div class="stop-left"><div class="dot onsen"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">오전 · 스기노이 호텔</div>
@@ -319,7 +357,7 @@
           <div class="stop-desc">수영복으로 들어가는 온천 '아쿠아 가든'. 게임코너·볼링까지 있는 대형 리조트라 수아가 지루할 틈이 없어요. 시설 이용료의 숙박 포함 여부는 예약 플랜 확인. <a href="https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E4%B9%83%E4%BA%95%E3%83%9B%E3%83%86%E3%83%AB" target="_blank">📍구글맵</a></div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="10:00">
         <div class="stop-left"><div class="dot onsen"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">오전 · 스기노이 호텔</div>
@@ -328,7 +366,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-lunch">🍱 점심</div>
-      <div class="stop">
+      <div class="stop" data-t="12:00">
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
@@ -337,7 +375,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-spot">🎡 낮 — 벳푸 라쿠텐치</div>
-      <div class="stop">
+      <div class="stop" data-t="13:00">
         <div class="stop-left"><div class="dot exp"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">낮 · 택시 약 5~10분</div>
@@ -371,7 +409,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-night">♨️ 저녁</div>
-      <div class="stop">
+      <div class="stop" data-t="18:00">
         <div class="stop-left"><div class="dot onsen"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">저녁 · 스기노이</div>
@@ -393,7 +431,7 @@
     <div class="hotel-banner"><p>🏨 하나벳푸 <span>· 3박차 (12/1~12/2)</span></p></div>
     <div class="timeline">
       <div class="tl-group-label lb-transport">🧳 체크아웃</div>
-      <div class="stop">
+      <div class="stop" data-t="11:00">
         <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">11:00</div>
@@ -402,7 +440,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-activity">♨️ 모래온천</div>
-      <div class="stop">
+      <div class="stop" data-t="12:00">
         <div class="stop-left"><div class="dot onsen"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">점심 전후 · 벳푸역 도보 10분</div>
@@ -411,7 +449,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-night">🏨 하나벳푸</div>
-      <div class="stop">
+      <div class="stop" data-t="15:00">
         <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">15:00 · 벳푸역 서쪽 출구 도보 6분</div>
@@ -419,7 +457,7 @@
           <div class="stop-desc">2026년 3월 리뉴얼 오픈한 올인클루시브 료칸. 온종일 타타미 바닥이라 아이 동반에도 안심. <a href="https://www.google.com/maps/search/?api=1&query=%E8%8A%B1%E3%81%B9%E3%81%A3%E3%81%B7%20%E5%88%A5%E5%BA%9C" target="_blank">📍구글맵</a></div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="15:30">
         <div class="stop-left"><div class="dot cafe"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">15:30~</div>
@@ -428,7 +466,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-dinner">🍽️ 석식</div>
-      <div class="stop">
+      <div class="stop" data-t="18:00">
         <div class="stop-left"><div class="dot food"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">18:00</div>
@@ -450,7 +488,7 @@
     <div class="hotel-banner"><p>🏨 미야코 호텔 하카타 <span>· 1박차 (12/2~12/3)</span></p></div>
     <div class="timeline">
       <div class="tl-group-label lb-transport">🚄 이동</div>
-      <div class="stop">
+      <div class="stop" data-t="11:00">
         <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">11:00</div>
@@ -458,7 +496,7 @@
           <div class="stop-desc">체크아웃 후 도보 6분. 역에서 기념품 사기 좋아요.</div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="11:50">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">11:50 · 벳푸역</div>
@@ -467,7 +505,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-lunch">🍱 늦은 점심</div>
-      <div class="stop">
+      <div class="stop" data-t="14:00">
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
@@ -476,7 +514,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-night">🏨 숙소</div>
-      <div class="stop">
+      <div class="stop" data-t="15:00">
         <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">15:00 · 하카타역 직결</div>
@@ -485,7 +523,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-spot">🛍️ 오후~저녁 — 캐널시티 하카타</div>
-      <div class="stop">
+      <div class="stop" data-t="16:30">
         <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">오후~저녁 · 하카타 쪽</div>
@@ -503,7 +541,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-dinner">🍽️ 저녁</div>
-      <div class="stop">
+      <div class="stop" data-t="19:00">
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
@@ -525,7 +563,7 @@
     <div class="hotel-banner"><p>🏨 미야코 호텔 하카타 <span>· 2박차 (12/3~12/4)</span></p></div>
     <div class="timeline">
       <div class="tl-group-label lb-activity">🎨 팀랩 → 타워 → 돈키호테</div>
-      <div class="stop">
+      <div class="stop" data-t="11:00">
         <div class="stop-left"><div class="dot exp"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">오전 · 11:00 오픈 맞춰 입장</div>
@@ -533,7 +571,7 @@
           <div class="stop-desc">아이가 뛰어놀며 체험하는 디지털 아트, 페이페이돔 옆. <b>이동:</b> 하카타역에서 버스 또는 택시 — 버스 번호·소요시간은 확인하지 못했으니 구글맵에서 「博多駅 → E・ZO FUKUOKA(地行浜)」로 검색하세요. <b>운영시간:</b> 평일 11:00 오픈, 폐장은 19:00(시설 정보)·20:00(2026-03 기사)로 안내가 갈려요 — 공식 확인. <b>관람 팁(확인 필요):</b> 운동화·편한 바지 · 전용 앱(Collecting Forest) 미리 설치(App Store 표기는 iPhone용 — Android 지원 여부 확인) · 내부 화장실·재입장 가능 여부는 확인하지 못했으니 입장 전 3층 푸드홀에서 식사·화장실을 마치는 게 안전. <a href="https://www.google.com/maps/search/?api=1&query=%E3%83%81%E3%83%BC%E3%83%A0%E3%83%A9%E3%83%9C%E3%83%95%E3%82%A9%E3%83%AC%E3%82%B9%E3%83%88%E7%A6%8F%E5%B2%A1" target="_blank">📍구글맵</a></div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="14:30">
         <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">오후</div>
@@ -541,7 +579,7 @@
           <div class="stop-desc">팀랩(E・ZO)에서 가까워요. 234m 전망대와 타워 앞 크리스마스 마켓(11/20~1/6). <a href="https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E3%82%BF%E3%83%AF%E3%83%BC" target="_blank">📍구글맵</a></div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="17:30">
         <div class="stop-left"><div class="dot spot"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">오후~저녁 · 호텔 복귀 길</div>
@@ -581,7 +619,7 @@
     <div class="hotel-banner"><p>🏨 미야코 호텔 하카타 <span>· 체크아웃 12:00</span></p></div>
     <div class="timeline">
       <div class="tl-group-label lb-lunch">🍱 이른 점심</div>
-      <div class="stop">
+      <div class="stop" data-t="11:00">
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
@@ -590,7 +628,7 @@
         </div>
       </div>
       <div class="tl-group-label lb-transport">✈️ 귀국</div>
-      <div class="stop">
+      <div class="stop" data-t="12:00">
         <div class="stop-left"><div class="dot hotel"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">12:00</div>
@@ -598,7 +636,7 @@
           <div class="stop-desc">체크아웃이 낮 12시라 여유 있어요. 역 직결이라 마지막 쇼핑도 간편.</div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="12:50">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">12:50경 · 하카타역</div>
@@ -606,7 +644,7 @@
           <div class="stop-desc">어린이 반값. 국내선 터미널 도착 후 무료 셔틀(10-15분)로 국제선 터미널(활주로 건너편 별관). 촉박하면 택시 10-15분. <a href="https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E7%A9%BA%E6%B8%AF%20%E5%9B%BD%E9%9A%9B%E7%B7%9A%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">📍구글맵</a></div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="15:50">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">15:50 · 후쿠오카공항</div>
@@ -614,7 +652,7 @@
           <div class="stop-desc">대한항공 편명이지만 아시아나 OZ133 운항(후쿠오카공항 2026-11 국제선 시각표 기준). 인천 17:20 도착. <b>12월 시각표는 미공표 — 대한항공 예약 조회로 확정.</b> 13:30 전후 공항 도착이면 여유.</div>
         </div>
       </div>
-      <div class="stop">
+      <div class="stop" data-t="17:20">
         <div class="stop-left"><div class="dot trs"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">17:20~ · 인천공항</div>
@@ -726,11 +764,62 @@
   })();
   </script>
 
+  <p class="section-title" id="fasttrack">🛂 교통약자 패스트트랙 — 인천공항 출국 우대출구</p>
+  <div class="ft-card">
+    <div class="ft-head">인천공항 교통약자 출국 우대서비스(우대출구)
+      <small>공식: 교통약자/다자녀 가구 출국 우대서비스 · 운영기획팀 · 2026-11-27 확인 · <a href="https://www.airport.kr/ap_ko/908/subview.do" target="_blank" style="color:#e0e7ff;">공식 페이지</a></small></div>
+    <div class="ft-body">
+      <h5>우리 가족은?</h5>
+      <div class="ft-us"><b>수아(만 6세) = 유소아 대상</b> · 대상 기준 <b>만 7세 미만</b>, 증빙은 <b>여권</b>.<br>
+        <b>동반 최대 3인</b>까지 함께 이용 → 우리 가족 3명 모두 같이 이용 가능.<br>
+        <b>2터미널(T2)</b> 출입구: <b>3층 1D 또는 2A 출국장</b>의 교통약자 우대출구.</div>
+
+      <h5>출입구 위치</h5>
+      <table class="ft-tbl">
+        <tr><th>터미널</th><th>우대출구 위치(공식 안내도 기준)</th><th>출국장 번호</th></tr>
+        <tr class="me"><td>제2여객터미널 (T2) ◀ 우리</td><td><b>3층 1D, 2A 출국장</b> (안내도: "교통약자우대출구는 3층 1D, 2A 출국장입니다")</td><td>출국장 <b>1 (1D)</b> · <b>2 (2A)</b></td></tr>
+        <tr><td>제1여객터미널 (T1) · 참고</td><td>3층 2~5번 출국장 <b>측문</b> ("전용출구는 3층 2~5번 출국장 측문")</td><td>5·4·3·2 (측문)</td></tr>
+      </table>
+      <div class="src" style="margin:4px 0 0;">안내도 범례: A~N = 체크인 카운터, 출국장 1~2(T2)·1~6(T1), 면세지역/일반지역 구분. 공식 페이지에는 안내도 그림과 위 문구만 있고, 각 출국장 안에서의 더 자세한 위치 설명은 없어요. T2 층수(3층)는 안내도 설명문에만 나와요.</div>
+
+      <h5>이용 방법 (유소아 · 고령자)</h5>
+      <ol class="ft-steps">
+        <li><b>우대출구 입구에서 여권 제시</b></li>
+        <li><b>여권 스캔 및 대상자 인증</b></li>
+        <li><b>우대출구 이용</b> (동반 3인까지 함께)</li>
+      </ol>
+      <div class="src" style="margin:4px 0 0;">※ 공식 '임신부·유아·어린이 동반' 안내(airport.kr/ap_ko/949)에는 "체크인카운터에서 이용대상자임을 확인받고 <b>교통약자 우대카드</b>를 받아 전용 출국장 입구에서 여권과 함께 제시"라고 되어 있어 위 절차와 달라요. <b>체크인 때 항공사 직원에게 우대출구 이용 방법을 확인</b>하면 안전해요.</div>
+
+      <h5>운영시간 · 문의</h5>
+      <div>우대서비스 운영시간은 <b>"출국장 운영시간과 동일"</b>(별도 시간 없음).<br>
+        문의 <b>인천국제공항 고객센터 1577-2600</b> (07:00~22:00, 연중무휴) · 담당부서 운영기획팀.</div>
+
+      <h5>⚠️ 확인하지 못한 것 / 주의</h5>
+      <div class="warn-box" style="margin:0;"><strong>출국심사(법무부)까지 우대되는지</strong>, 우대출구가 보안검색 전용 통로인지는 공식 페이지에 <b>적혀 있지 않아요</b>(확인 못 함). <strong>수아가 11/29 전에 만 7세가 되면 대상이 아니에요</strong> — 여권 생년월일로 확인. 만 7세 미만 증빙은 <b>여권</b>이라 3명 모두 여권을 꼭 지참.</div>
+
+      <details>
+        <summary>다른 이용 대상 (참고)</summary>
+        <table class="ft-tbl">
+          <tr><th>구분</th><th>대상</th><th>증빙 · 방법</th></tr>
+          <tr class="me"><td>유소아</td><td>만 7세 미만</td><td>여권 · 입구에서 여권 스캔·인증</td></tr>
+          <tr><td>고령자</td><td>만 70세 이상</td><td>여권 · 입구에서 여권 스캔·인증</td></tr>
+          <tr><td>장애인</td><td>보행상 장애인(보건복지부 고시 '장애 등급 판정 기준')</td><td>장애인 복지카드 · 체크인 때 증빙 제시 후 교통약자 스티커 수령 → 입구에서 스티커 제시</td></tr>
+          <tr><td>임산부</td><td>임신 중인 산모</td><td>산모수첩 · 스티커 수령 방식 동일</td></tr>
+          <tr><td>항공사 병약승객</td><td>휠체어·항공침대·의료용 산소 등 항공사 의료서비스 이용 여객</td><td>항공사 직원 동행</td></tr>
+          <tr><td>사회적 기여자</td><td>법무부 출입국 우대카드 소지자</td><td>입구에서 출입국 우대카드 제시</td></tr>
+          <tr><td>다자녀 가구 ('25.6.10.~)</td><td>자녀 전원이 만 19세 미만인 3자녀 이상 가구 · 부모 1인 이상 + 자녀 1인 이상 함께 출국 · 가구당 동반 3인까지</td><td>여권 + 가족관계증명서 또는 주민등록등본(실물·전자증명서, 3개월 이내 발급분) · 입구에서 제시</td></tr>
+        </table>
+        <div class="src" style="margin:4px 0 0;">장애인·임산부는 동반 최대 3인 이용 가능. 출처: 인천국제공항공사 「교통약자/다자녀 가구 출국 우대서비스」 https://www.airport.kr/ap_ko/908/subview.do (2026-11-27 확인)</div>
+      </details>
+    </div>
+  </div>
+
   <p class="section-title">✅ 출발 전 확인</p>
   <div class="checklist">
     <h4>예약·시간 확정</h4>
     <div class="check-item">소닉 티켓 실제 출발 시각 (예약 11:50 vs 시각표 11:52)</div>
     <div class="check-item">KE5488 귀국편 12월 시각표 확정 (잠정 15:50)</div>
+    <div class="check-item">11/29 인천 T2 교통약자 우대출구(3층 1D·2A) — 수아 여권 생년월일로 만 7세 미만 확인, 체크인 카운터에서 이용 가능 여부·절차 확인 (여권 3명 모두 지참)</div>
     <div class="check-item">콜밴 기사님께 귀국 도착 시각 확정되면 알려드리기 (출발 11/29 05:30, 귀국 픽업 시각·장소)</div>
     <div class="check-item">스기노이·하나벳푸 예약 플랜의 식사·시설 포함 범위 (수아 식사 포함)</div>
     <div class="check-item">11/30(월) 스기노이 ↔ 벳푸역 셔틀 시각표 (벳푸역에 나갈 경우)</div>
@@ -739,7 +828,7 @@
   </div>
 
   <p class="section-title">📚 요금·운행 정보 출처</p>
-  <p class="src">오이타현 공식 2026 동계 국제선 다이아(KE2177) · 오이타공항 공식 접근 안내 · 스기노이 호텔 셔틀버스 공식 · 하나벳푸 올인클루시브 공식 · 미야코 호텔 하카타 FAQ · JR큐슈 소닉·넷 얼리버드 요금·역별 시각표 · 후쿠오카공항 접근·지하철 안내 · 다케가와라 온센 요금 · 에키마에 고토 온센·벳푸 타워 정보(안내마다 상이) · 닌텐도 후쿠오카·팀랩 포레스트·후쿠오카시 동식물원·후쿠오카 크리스마스 어드벤트 2026. 요금·운영 정보 2026-11-06 기준, 식당은 2026-11-07 구글 지도 공유 목록 '26년 일본여행'과 공식·현지 안내 기준.<br>
+  <p class="src">오이타현 공식 2026 동계 국제선 다이아(KE2177) · 오이타공항 공식 접근 안내 · 스기노이 호텔 셔틀버스 공식 · 하나벳푸 올인클루시브 공식 · 미야코 호텔 하카타 FAQ · JR큐슈 소닉·넷 얼리버드 요금·역별 시각표 · 후쿠오카공항 접근·지하철 안내 · 다케가와라 온센 요금 · 에키마에 고토 온센·벳푸 타워 정보(안내마다 상이) · 닌텐도 후쿠오카·팀랩 포레스트·후쿠오카시 동식물원·후쿠오카 크리스마스 어드벤트 2026 · 인천공항 교통약자·다자녀 출국 우대서비스 공식 안내(2026-11-27 확인). 요금·운영 정보 2026-11-06 기준, 식당은 2026-11-07 구글 지도 공유 목록 '26년 일본여행'과 공식·현지 안내 기준.<br>
   크리스마스 마켓(여행 기간 중 열림): 하카타역(11/7~12/25) · 텐진(11/14~12/26) · 텐진중앙공원(11/12~12/25) · 나카스(11/2~1/12) · 모모치(11/20~1/6).</p>
 
   <div class="footer">1차안 기준 · 일정이 바뀌면 이 페이지와 지도·쇼핑목록을 함께 갱신합니다</div>
@@ -803,6 +892,56 @@
       body.classList.toggle('collapsed', !isCollapsed);
     });
   });
+</script>
+
+<script>
+// 현재 시각 하이라이트: 오늘이 여행일이면 그날 일정에서 "지금" 항목과 "다음" 항목을 표시한다.
+// 일본·한국 시차 없음(UTC+9)이라 KST 고정. 테스트: 주소 뒤에 ?now=2026-11-29T07:10
+(function () {
+  var firstRun = true;
+  function nowKST() {
+    var q = location.search.match(/[?&]now=(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)/);
+    if (q) return { y: +q[1], m: +q[2], d: +q[3], min: +q[4] * 60 + +q[5] };
+    var k = new Date(Date.now() + 9 * 3600 * 1000);
+    return { y: k.getUTCFullYear(), m: k.getUTCMonth() + 1, d: k.getUTCDate(), min: k.getUTCHours() * 60 + k.getUTCMinutes() };
+  }
+  function cardDate(card) {
+    var p = card.previousElementSibling;
+    var m = p && p.textContent.match(/(\d+)월\s*(\d+)일/);
+    return m ? { m: +m[1], d: +m[2] } : null;
+  }
+  function update() {
+    var now = nowKST(), target = null;
+    document.querySelectorAll('.stop.now, .stop.next').forEach(function (s) { s.classList.remove('now', 'next'); });
+    document.querySelectorAll('.day-card').forEach(function (card) {
+      var dt = cardDate(card);
+      if (!dt || now.y !== 2026 || dt.m !== now.m || dt.d !== now.d) return;
+      var stops = Array.prototype.slice.call(card.querySelectorAll('.stop[data-t]')).map(function (s) {
+        var h = s.getAttribute('data-t').split(':');
+        return { el: s, t: +h[0] * 60 + +h[1] };
+      });
+      var cur = null, next = null;
+      stops.forEach(function (s) {
+        if (s.t <= now.min) { if (!cur || s.t >= cur.t) cur = s; }
+        else if (!next || s.t < next.t) next = s;
+      });
+      if (cur && !next && now.min - cur.t > 180) cur = null; // 마지막 일정이 끝난 지 3시간 지나면 표시 해제
+      if (cur) cur.el.classList.add('now');
+      if (next) next.el.classList.add('next');
+      var header = card.querySelector('.day-header'), body = card.querySelector('.day-body');
+      if (header) header.classList.remove('collapsed');
+      if (body) body.classList.remove('collapsed');
+      target = cur ? cur.el : (next ? next.el : null);
+    });
+    if (firstRun && target) {
+      firstRun = false;
+      setTimeout(function () { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
+    }
+  }
+  update();
+  setInterval(update, 60000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) update(); });
+})();
 </script>
 
 <script>if ('serviceWorker' in navigator) { addEventListener('load', function () { navigator.serviceWorker.register('/trip-plan/sw.js', { scope: '/trip-plan/' }).catch(function () {}); }); }</script>
