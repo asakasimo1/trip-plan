@@ -168,6 +168,22 @@
   .driver-box { background: white; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.08); border-left: 4px solid #6366f1; }
   .driver-title { font-size: 13px; font-weight: 800; color: #3730a3; margin-bottom: 4px; }
   .driver-line { font-size: 12px; color: #475569; line-height: 1.6; }
+
+  /* 🌤️ 이동 경로별 날씨 (3시간 간격) */
+  .wx { margin: 8px 16px 6px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 10px 10px 8px; }
+  .wx-title { font-size: 12px; font-weight: 800; color: #0369a1; margin-bottom: 6px; }
+  .wx-title small { font-weight: 600; color: #0c4a6e; opacity: .8; }
+  .wx-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+  .wx-c { background: white; border-radius: 8px; padding: 5px 2px; text-align: center; border: 1px solid #e0f2fe; }
+  .wx-c.wx-dis { border-color: #f59e0b; background: #fffbeb; }
+  .wx-h { font-size: 11px; font-weight: 800; color: #334155; }
+  .wx-p { font-size: 9.5px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wx-i { font-size: 22px; line-height: 1.25; }
+  .wx-t { font-size: 13px; font-weight: 800; color: #1e293b; }
+  .wx-r { font-size: 10px; color: #0284c7; font-weight: 700; min-height: 13px; }
+  .wx-note { font-size: 12px; color: #0f172a; line-height: 1.55; margin-top: 7px; }
+  .wx-leg { font-size: 10.5px; color: #475569; margin-top: 5px; line-height: 1.6; }
+  .wx-src { font-size: 10px; color: #64748b; margin-top: 4px; }
   .driver-call { display: inline-block; margin-top: 8px; background: linear-gradient(90deg, #4f46e5, #6366f1); color: white; font-weight: 800; font-size: 14px; border-radius: 10px; padding: 10px 16px; text-decoration: none; }
   .driver-form { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
   .driver-form input { flex: 1 1 150px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; font-size: 14px; font-family: inherit; }
@@ -273,6 +289,9 @@
       <span class="day-title">KE2177 인천 09:15 → 오이타 10:50 → 벳푸역 점심 → 스기노이 온천 리조트</span>
     </div>
     <div class="hotel-banner"><p>🏨 스기노이 호텔 <span>· 1박차 (11/29~11/30)</span></p></div>
+<!--WX-->
+<div class="wx"><div class="wx-title">🌤️ 이동 경로별 날씨 <small>3시간 간격 · 2026-11-28 기준 예보</small></div><div class="wx-row"><div class="wx-c" title="맑음"><div class="wx-h">06시</div><div class="wx-p">인천</div><div class="wx-i">☀️</div><div class="wx-t">1°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">09시</div><div class="wx-p">인천</div><div class="wx-i">☀️</div><div class="wx-t">2°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">12시</div><div class="wx-p">벳푸</div><div class="wx-i">☀️</div><div class="wx-t">11°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">15시</div><div class="wx-p">스기노이</div><div class="wx-i">☀️</div><div class="wx-t">11°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">18시</div><div class="wx-p">스기노이</div><div class="wx-i">🌙</div><div class="wx-t">6°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">21시</div><div class="wx-p">스기노이</div><div class="wx-i">🌙</div><div class="wx-t">3°</div><div class="wx-r">·</div></div></div><div class="wx-note">인천 새벽은 1~2°C로 매우 추워요(맑음). 오이타·벳푸는 낮 10~11°C, 밤 3~6°C로 쌀쌀해요. 새벽 소량 비는 JMA만 2mm로 예측하고 다른 모델은 거의 0이며, 도착 전에 그쳐요.</div><div class="wx-leg">☀️ 맑음 · 🌤️ 대체로 맑음 · ⛅ 구름 많음 · ☁️ 흐림 · 🌦️ 약한 비 · 🌧️ 비 · ☔ 큰 비 · 🌙 밤 · ⚠ 모델 엇갈림</div><div class="wx-src">Open-Meteo(JMA·ECMWF·ICON·GFS 4개 모델 중앙값) · 예보는 바뀔 수 있어요. 비 mm는 해당 3시간 합계예요.</div></div>
+<!--/WX-->
     <div class="timeline">
       <div class="tl-group-label lb-transport">✈️ 교통</div>
       <div class="stop" data-t="05:30">
@@ -347,6 +366,9 @@
       <span class="day-title">스기노이 리조트 데이(아쿠아 가든·온천) + 낮에 벳푸 라쿠텐치</span>
     </div>
     <div class="hotel-banner"><p>🏨 스기노이 호텔 <span>· 2박차 (11/30~12/1)</span></p></div>
+<!--WX-->
+<div class="wx"><div class="wx-title">🌤️ 이동 경로별 날씨 <small>3시간 간격 · 2026-11-28 기준 예보</small></div><div class="wx-row"><div class="wx-c" title="맑음"><div class="wx-h">06시</div><div class="wx-p">스기노이</div><div class="wx-i">☀️</div><div class="wx-t">4°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">09시</div><div class="wx-p">스기노이</div><div class="wx-i">☀️</div><div class="wx-t">9°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">12시</div><div class="wx-p">스기노이</div><div class="wx-i">☀️</div><div class="wx-t">14°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">15시</div><div class="wx-p">스기노이</div><div class="wx-i">☀️</div><div class="wx-t">14°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">18시</div><div class="wx-p">스기노이</div><div class="wx-i">🌙</div><div class="wx-t">10°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">21시</div><div class="wx-p">스기노이</div><div class="wx-i">🌙</div><div class="wx-t">8°</div><div class="wx-r">·</div></div></div><div class="wx-note">종일 맑고 비 없음(4개 모델 일치). 아침 4°C → 낮 14°C라 일교차가 커요. 라쿠텐치 가는 낮 시간대가 가장 좋아요.</div><div class="wx-src">Open-Meteo(JMA·ECMWF·ICON·GFS 4개 모델 중앙값) · 예보는 바뀔 수 있어요. 비 mm는 해당 3시간 합계예요.</div></div>
+<!--/WX-->
     <div class="timeline">
       <div class="tl-group-label lb-activity">🏊 오전 — 호텔에서</div>
       <div class="stop" data-t="09:00">
@@ -429,6 +451,9 @@
       <span class="day-title">스기노이 체크아웃 → 다케가와라 모래찜 → 하나벳푸 올인클루시브 · 가이세키</span>
     </div>
     <div class="hotel-banner"><p>🏨 하나벳푸 <span>· 3박차 (12/1~12/2)</span></p></div>
+<!--WX-->
+<div class="wx"><div class="wx-title">🌤️ 이동 경로별 날씨 <small>3시간 간격 · 2026-11-28 기준 예보</small></div><div class="wx-row"><div class="wx-c" title="맑음"><div class="wx-h">06시</div><div class="wx-p">스기노이</div><div class="wx-i">☀️</div><div class="wx-t">9°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">09시</div><div class="wx-p">스기노이</div><div class="wx-i">☀️</div><div class="wx-t">14°</div><div class="wx-r">·</div></div><div class="wx-c" title="대체로 맑음"><div class="wx-h">12시</div><div class="wx-p">벳푸</div><div class="wx-i">🌤️</div><div class="wx-t">20°</div><div class="wx-r">·</div></div><div class="wx-c" title="대체로 맑음"><div class="wx-h">15시</div><div class="wx-p">벳푸</div><div class="wx-i">🌤️</div><div class="wx-t">21°</div><div class="wx-r">·</div></div><div class="wx-c" title="대체로 맑음"><div class="wx-h">18시</div><div class="wx-p">벳푸</div><div class="wx-i">🌙</div><div class="wx-t">16°</div><div class="wx-r">·</div></div><div class="wx-c" title="대체로 맑음"><div class="wx-h">21시</div><div class="wx-p">벳푸</div><div class="wx-i">🌙</div><div class="wx-t">14°</div><div class="wx-r">·</div></div></div><div class="wx-note">맑음~대체로 맑음, 비 없음(4개 모델 일치). 낮 최고 약 20°C로 가장 포근하고 아침은 9°C예요.</div><div class="wx-src">Open-Meteo(JMA·ECMWF·ICON·GFS 4개 모델 중앙값) · 예보는 바뀔 수 있어요. 비 mm는 해당 3시간 합계예요.</div></div>
+<!--/WX-->
     <div class="timeline">
       <div class="tl-group-label lb-transport">🧳 체크아웃</div>
       <div class="stop" data-t="11:00">
@@ -486,6 +511,9 @@
       <span class="day-title">특급 소닉 벳푸 → 하카타 · 미야코 호텔 체크인·짐 보관 · 캐널시티 (식사는 후보에서 선택)</span>
     </div>
     <div class="hotel-banner"><p>🏨 미야코 호텔 하카타 <span>· 1박차 (12/2~12/3)</span></p></div>
+<!--WX-->
+<div class="wx"><div class="wx-title">🌤️ 이동 경로별 날씨 <small>3시간 간격 · 2026-11-28 기준 예보</small></div><div class="wx-row"><div class="wx-c" title="대체로 맑음"><div class="wx-h">06시</div><div class="wx-p">벳푸</div><div class="wx-i">🌤️</div><div class="wx-t">12°</div><div class="wx-r">·</div></div><div class="wx-c" title="맑음"><div class="wx-h">09시</div><div class="wx-p">벳푸</div><div class="wx-i">☀️</div><div class="wx-t">14°</div><div class="wx-r">·</div></div><div class="wx-c" title="대체로 맑음"><div class="wx-h">12시</div><div class="wx-p">벳푸</div><div class="wx-i">🌤️</div><div class="wx-t">19°</div><div class="wx-r">·</div></div><div class="wx-c" title="흐림"><div class="wx-h">15시</div><div class="wx-p">하카타</div><div class="wx-i">☁️</div><div class="wx-t">20°</div><div class="wx-r">·</div></div><div class="wx-c" title="흐림"><div class="wx-h">18시</div><div class="wx-p">하카타</div><div class="wx-i">☁️</div><div class="wx-t">17°</div><div class="wx-r">·</div></div><div class="wx-c" title="흐림"><div class="wx-h">21시</div><div class="wx-p">하카타</div><div class="wx-i">☁️</div><div class="wx-t">14°</div><div class="wx-r">·</div></div></div><div class="wx-note">벳푸는 맑고 이동·캐널시티 시간대(하카타 오후)는 흐리지만 비 없음. 비구름은 밤사이 12/3 새벽에 다가와요.</div><div class="wx-src">Open-Meteo(JMA·ECMWF·ICON·GFS 4개 모델 중앙값) · 예보는 바뀔 수 있어요. 비 mm는 해당 3시간 합계예요.</div></div>
+<!--/WX-->
     <div class="timeline">
       <div class="tl-group-label lb-transport">🚄 이동</div>
       <div class="stop" data-t="11:00">
@@ -561,6 +589,9 @@
       <span class="day-title">팀랩 포레스트 → 후쿠오카타워 · 모모치해변 → 돈키호테 쇼핑 후 호텔 복귀</span>
     </div>
     <div class="hotel-banner"><p>🏨 미야코 호텔 하카타 <span>· 2박차 (12/3~12/4)</span></p></div>
+<!--WX-->
+<div class="wx"><div class="wx-title">🌤️ 이동 경로별 날씨 <small>3시간 간격 · 2026-11-28 기준 예보</small></div><div class="wx-row"><div class="wx-c" title="비"><div class="wx-h">06시</div><div class="wx-p">하카타</div><div class="wx-i">🌧️</div><div class="wx-t">14°</div><div class="wx-r">1.4mm</div></div><div class="wx-c" title="비"><div class="wx-h">09시</div><div class="wx-p">모모치</div><div class="wx-i">🌧️</div><div class="wx-t">16°</div><div class="wx-r">1.8mm</div></div><div class="wx-c" title="약한 비"><div class="wx-h">12시</div><div class="wx-p">모모치</div><div class="wx-i">🌦️</div><div class="wx-t">18°</div><div class="wx-r">0.6mm</div></div><div class="wx-c" title="약한 비"><div class="wx-h">15시</div><div class="wx-p">모모치</div><div class="wx-i">🌦️</div><div class="wx-t">21°</div><div class="wx-r">0.3mm</div></div><div class="wx-c" title="구름 많음"><div class="wx-h">18시</div><div class="wx-p">하카타</div><div class="wx-i">☁️</div><div class="wx-t">18°</div><div class="wx-r">·</div></div><div class="wx-c" title="대체로 맑음"><div class="wx-h">21시</div><div class="wx-p">하카타</div><div class="wx-i">🌙</div><div class="wx-t">15°</div><div class="wx-r">·</div></div></div><div class="wx-note">⚠️ 오전(06~12시) 비 — 3시간 합 1~3mm(일부 모델은 모모치 6~12시 최대 8mm), 낮엔 약한 비가 남고 15시 이후 대체로 그쳐요. 팀랩(실내) 오전, 모모치해변은 늦은 오후가 나아요. 접이식 우산 필수.</div><div class="wx-src">Open-Meteo(JMA·ECMWF·ICON·GFS 4개 모델 중앙값) · 예보는 바뀔 수 있어요. 비 mm는 해당 3시간 합계예요.</div></div>
+<!--/WX-->
     <div class="timeline">
       <div class="tl-group-label lb-activity">🎨 팀랩 → 타워 → 돈키호테</div>
       <div class="stop" data-t="11:00">
@@ -617,6 +648,9 @@
       <span class="day-title">12:00 체크아웃 → 지하철 5분 → 후쿠오카공항 → 인천</span>
     </div>
     <div class="hotel-banner"><p>🏨 미야코 호텔 하카타 <span>· 체크아웃 12:00</span></p></div>
+<!--WX-->
+<div class="wx"><div class="wx-title">🌤️ 이동 경로별 날씨 <small>3시간 간격 · 2026-11-28 기준 예보</small></div><div class="wx-row"><div class="wx-c" title="흐림"><div class="wx-h">06시</div><div class="wx-p">하카타</div><div class="wx-i">☁️</div><div class="wx-t">14°</div><div class="wx-r">·</div></div><div class="wx-c" title="구름 많음"><div class="wx-h">09시</div><div class="wx-p">하카타</div><div class="wx-i">⛅</div><div class="wx-t">15°</div><div class="wx-r">·</div></div><div class="wx-c" title="흐림"><div class="wx-h">12시</div><div class="wx-p">하카타</div><div class="wx-i">☁️</div><div class="wx-t">19°</div><div class="wx-r">·</div></div><div class="wx-c" title="흐림"><div class="wx-h">15시</div><div class="wx-p">후쿠오카공항</div><div class="wx-i">☁️</div><div class="wx-t">20°</div><div class="wx-r">·</div></div><div class="wx-c" title="흐림"><div class="wx-h">18시</div><div class="wx-p">인천</div><div class="wx-i">☁️</div><div class="wx-t">12°</div><div class="wx-r">·</div></div><div class="wx-c wx-dis" title="약한 비"><div class="wx-h">21시</div><div class="wx-p">인천</div><div class="wx-i">🌧️</div><div class="wx-t">11°</div><div class="wx-r">0.4mm⚠</div></div></div><div class="wx-note">낮엔 비 없음(4개 모델 일치) — 공항 이동 OK. 저녁 비는 모델마다 달라요(하카타 기준 0~18mm). 인천 도착(17:20)은 11~12°C, 밤 가벼운 비 가능.</div><div class="wx-src">Open-Meteo(JMA·ECMWF·ICON·GFS 4개 모델 중앙값) · 예보는 바뀔 수 있어요. 비 mm는 해당 3시간 합계예요.</div></div>
+<!--/WX-->
     <div class="timeline">
       <div class="tl-group-label lb-lunch">🍱 이른 점심</div>
       <div class="stop" data-t="11:00">
