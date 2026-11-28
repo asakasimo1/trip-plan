@@ -190,7 +190,7 @@
   .driver-form button { border: 0; border-radius: 8px; padding: 8px 14px; font-weight: 800; font-size: 13px; color: white; background: #4f46e5; cursor: pointer; font-family: inherit; }
   .driver-hint { font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.5; }
   .driver-reset { border: 0; background: none; color: #94a3b8; font-size: 11px; text-decoration: underline; cursor: pointer; margin-left: 8px; font-family: inherit; }
-  .nav-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .nav-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
   .route-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 16px 10px; }
   .route-row a { font-size: 12px; font-weight: 700; color: #1d4ed8; background: #eff6ff; border-radius: 20px; padding: 5px 12px; text-decoration: none; }
   .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -234,8 +234,11 @@
 
   <div class="nav-row">
     <a href="map/gmap.html">🗺️ 구글 지도</a>
-    <a href="#picks">🍽️ 맛집 후보</a>
+    <a href="picks.html">🍽️ 맛집 후보</a>
     <a href="shopping.html">🛍️ 쇼핑목록</a>
+    <a href="fasttrack.html">🛂 패스트트랙</a>
+    <a href="vlog.html">🎬 브이로그</a>
+    <a href="checklist.html">✅ 출발 전 확인</a>
   </div>
 
   <div class="driver-box" id="driver">
@@ -309,7 +312,7 @@
           <div class="stop-name">🛂 교통약자 우대출구로 빠르게 보안검색 <span class="tag tag-trs">수아 만 6세 = 대상</span></div>
           <div class="stop-desc">인천공항 공식 기준 <b>유소아는 만 7세 미만</b>(증빙은 여권)이라 만 6세 수아는 대상이고, 함께 가는 <b>동반인은 최대 3인</b>까지 같이 들어가요(우리 가족 3명 모두).<br>
             <b>이용 방법</b> ① 체크인 카운터에서 "교통약자 우대출구를 이용하고 싶다"고 확인받기(안내에 따라 '교통약자 우대카드'를 주기도 해요) ② 3층 <b>1D 또는 2A 출국장</b>의 우대출구 입구에서 <b>여권 제시 → 스캔·인증</b> ③ 우대출구로 입장. 운영시간은 출국장과 같아요.<br>
-            <b>⚠️ 확인할 것</b> · 공식 페이지 두 곳의 절차 안내가 달라요(여권만 제시 vs 카운터 확인 후 우대카드) — 체크인 때 직원에게 한 번 물어보세요. 출국심사(법무부)까지 우대되는지는 공식 안내에서 확인하지 못했어요. <b>수아가 11/29 전에 만 7세가 됐다면 대상이 아니에요</b> — 여권의 생년월일 기준. 문의 인천공항 고객센터 1577-2600. <a href="#fasttrack"><b>📋 패스트트랙 상세 안내(출입구·절차) 보기</b></a></div>
+            <b>⚠️ 확인할 것</b> · 공식 페이지 두 곳의 절차 안내가 달라요(여권만 제시 vs 카운터 확인 후 우대카드) — 체크인 때 직원에게 한 번 물어보세요. 출국심사(법무부)까지 우대되는지는 공식 안내에서 확인하지 못했어요. <b>수아가 11/29 전에 만 7세가 됐다면 대상이 아니에요</b> — 여권의 생년월일 기준. 문의 인천공항 고객센터 1577-2600. <a href="fasttrack.html"><b>📋 패스트트랙 상세 안내(출입구·절차) 보기</b></a></div>
         </div>
       </div>
       <div class="stop" data-t="09:15">
@@ -333,7 +336,7 @@
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
-          <div class="stop-name">🍽️ 점심 — <a href="#picks">맛집 후보</a>에서 고르기</div>
+          <div class="stop-name">🍽️ 점심 — <a href="picks.html">맛집 후보</a>에서 고르기</div>
           <div class="stop-desc">벳푸역 주변에 이자카야·도리텐(닭튀김) 식당이 몰려 있어요. 저장 목록에 벳푸 식당은 없어서 현장에서 정해요.</div>
         </div>
       </div>
@@ -537,7 +540,7 @@
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
-          <div class="stop-name">🍽️ 늦은 점심 — <a href="#picks">맛집 후보</a>에서 고르기</div>
+          <div class="stop-name">🍽️ 늦은 점심 — <a href="picks.html">맛집 후보</a>에서 고르기</div>
           <div class="stop-desc">13:49 하카타 도착 직후라 하카타역 안 후보가 가까워요.</div>
         </div>
       </div>
@@ -573,7 +576,7 @@
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
-          <div class="stop-name">🍽️ 저녁 — <a href="#picks">맛집 후보</a>에서 고르기</div>
+          <div class="stop-name">🍽️ 저녁 — <a href="picks.html">맛집 후보</a>에서 고르기</div>
           <div class="stop-desc">캐널시티·나카스 쪽 후보나 하카타역 안 후보 중에서 컨디션 보고 결정.</div>
         </div>
       </div>
@@ -623,7 +626,7 @@
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
-          <div class="stop-name">🍽️ 점심·저녁 — <a href="#picks">맛집 후보</a>에서 고르기</div>
+          <div class="stop-name">🍽️ 점심·저녁 — <a href="picks.html">맛집 후보</a>에서 고르기</div>
           <div class="stop-desc">점심은 E・ZO 3층 푸드홀(입장 전)이나 모모치 근처, 저녁은 나카스·하카타역 근처 후보가 편해요. 억지로 되돌아오지 말고 동선에서 가까운 곳으로.</div>
         </div>
       </div>
@@ -657,7 +660,7 @@
         <div class="stop-left"><div class="dot lunch"></div><div class="line"></div></div>
         <div class="stop-right">
           <div class="stop-time">당일 선택</div>
-          <div class="stop-name">🍽️ 이른 점심 — <a href="#picks">맛집 후보</a>에서 고르기</div>
+          <div class="stop-name">🍽️ 이른 점심 — <a href="picks.html">맛집 후보</a>에서 고르기</div>
           <div class="stop-desc">12:00 체크아웃·12:50 출발이라 11시 전후가 여유 있어요. 대기가 길면 간단히 먹고 공항 이동을 우선.</div>
         </div>
       </div>
@@ -708,186 +711,6 @@
       <a class="map-btn" style="margin-left:8px" href="https://www.google.com/maps/d/viewer?mid=15WOosCb-NuJpVjpzObgiSXqQoXHo4g8&hl=ko" target="_blank">📌 내 지도</a>
     </div>
   </div>
-
-  <p class="section-title" id="picks">🍽️ 맛집 후보 — 당일에 골라요</p>
-  <div class="src" style="margin-bottom:8px;">내가 구글 지도 목록 <b>'26년 일본여행'</b>에 즐겨찾기한 식당·간식점 12곳이에요. <b>동선에 넣지 않았어요</b> — 그날 위치·컨디션·대기 보고 고르세요. 영업시간은 2026-11-07 확인한 일반 안내라 여행일 영업·좌석을 확약하지 않아요(부정기 휴무 확인). 호텔 조식, 11/29~30 스기노이 석식, 12/1 하나벳푸 석식은 숙박 포함 범위가 기준이에요. 벳푸 식당은 저장 목록에 없어 현장에서 정해요.</div>
-  <div class="filters" id="filters">
-    <button type="button" class="on" data-f="">전체</button><button type="button" data-f="점심">점심</button><button type="button" data-f="저녁">저녁</button><button type="button" data-f="간식">간식·카페</button>
-  </div>
-  <div class="area-group"><div class="area-title">하카타역 안·주변</div>
-    <div class="pick" data-meals="점심 저녁">
-      <div class="pick-top"><div class="pick-name">철판 텐진 호르몬<small>鉄板天神 ホルモン</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E9%89%84%E6%9D%BF%E5%A4%A9%E7%A5%9E%20%E5%8D%9A%E5%A4%9A%E4%B8%80%E7%95%AA%E8%A1%97" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">점심</span><span class="m">저녁</span> <b>10:00-22:00 (L.O.21:00)</b><br>철판 고기·호르몬 정식. 하카타역 B1 하카타이치방가이.<br>내장 대신 소고기를 고를 수 있어요. 수아에게는 잘 익힌 고기로, 뜨거운 철판 조심.</div>
-      <div class="pick-warn">⚠️ 아이 메뉴·알레르기 대응은 미확인.</div>
-    </div>
-    <div class="pick" data-meals="점심 저녁">
-      <div class="pick-top"><div class="pick-name">하카타 우오가시<small>博多 魚がし</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%8D%9A%E5%A4%9A%E3%81%86%E3%81%8A%E3%81%8C%E3%81%97%20%E5%8D%9A%E5%A4%9A%E9%A7%85" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">점심</span><span class="m">저녁</span> <b>11:00-21:30 (OS21:00)</b><br>초밥·구운 붕장어. 하카타역 B1, 24석 전석 금연.<br>아이에게는 익힌 재료를 골라요.</div>
-      
-    </div>
-    <div class="pick" data-meals="점심 저녁">
-      <div class="pick-top"><div class="pick-name">쿠로카츠테이<small>黒かつ亭 KUUTEN</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E9%BB%92%E3%81%8B%E3%81%A4%E4%BA%AD%20%E5%8D%9A%E5%A4%9A%E9%A7%85%20KUUTEN" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">점심</span><span class="m">저녁</span> <b>11:00-22:00 (무휴 안내)</b><br>흑돼지 돈카츠. 하카타역 쿠우텐 9F, 35석(테이블·카운터).<br>귀국일(12/4) 11시 이른 점심에 가장 가까운 후보.</div>
-      
-    </div>
-    <div class="pick" data-meals="점심 저녁">
-      <div class="pick-top"><div class="pick-name">와규 西豊舎<small>和牛 西豊舎</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%A5%BF%E8%B1%8A%E8%88%8E%20%E5%8D%9A%E5%A4%9A%E9%A7%85%20KUUTEN" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">점심</span><span class="m">저녁</span> <b>11:00-23:00 (L.O.22:00)</b><br>구마모토 아카우시 히쓰마부시. 하카타역 쿠우텐 10F.<br>점심 예산 안내 ¥2,200~. 주문 구성에 따라 달라요.</div>
-      
-    </div>
-    <div class="pick" data-meals="저녁">
-      <div class="pick-top"><div class="pick-name">예비스 바<small>EBISU BAR</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%A8%E3%83%93%E3%82%B9%E3%83%90%E3%83%BC%20%E5%8D%9A%E5%A4%9A%E4%B8%80%E7%95%AA%E8%A1%97" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">저녁</span> <b>일~목 11:00-22:00 · 금~토 11:00-23:00</b><br>맥주·양식 중심. 하카타1번가, 전석 금연.</div>
-      <div class="pick-warn">⚠️ 맥주 중심이라 가족 식사에는 후순위로 보관했던 곳.</div>
-    </div>
-    <div class="pick" data-meals="저녁">
-      <div class="pick-top"><div class="pick-name">나카모구로<small>中目黒 博多</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%AD%E7%9B%AE%E9%BB%92%20%E5%8D%9A%E5%A4%9A%20%E3%82%AA%E3%83%AA%E3%82%A8%E3%83%B3%E3%82%BF%E3%83%AB%E3%83%9B%E3%83%86%E3%83%AB" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">저녁</span> <b>평일 11:30-14:30 / 17:00-23:00</b><br>오리 샤부샤부·스키야키. 오리엔탈호텔 B1, 하카타역 동쪽.</div>
-      <div class="pick-warn">⚠️ 분연이며 흡연석에서 가열식 담배 가능 — 아이 동반은 금연석 확인 필요.</div>
-    </div>
-    <div class="pick" data-meals="저녁">
-      <div class="pick-top"><div class="pick-name">핫슈 하나레<small>八宗 離れ</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%85%AB%E5%AE%97%20%E9%9B%A2%E3%82%8C%20%E5%8D%9A%E5%A4%9A%E9%A7%85%E6%9D%B1" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">저녁</span> <b>17:00-24:00</b><br>개인실 식당. 하카타에키히가시 2-4-14.</div>
-      <div class="pick-warn">⚠️ 공식 흡연 가능 개인실 안내가 있어 수아 동반 기본안에서는 제외했던 곳 — 가시려면 금연 여부 확인.</div>
-    </div>
-  </div>
-  <div class="area-group"><div class="area-title">블로썸 하카타 (하카타역 앞)</div>
-    <div class="pick" data-meals="점심 저녁">
-      <div class="pick-top"><div class="pick-name">이쿠라 하카타점<small>いくら 博多店</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%81%84%E3%81%8F%E3%82%89%20%E5%8D%9A%E5%A4%9A%E5%BA%97%20%E3%83%96%E3%83%AD%E3%83%83%E3%82%B5%E3%83%A0%E5%8D%9A%E5%A4%9A" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">점심</span><span class="m">저녁</span> <b>평일 11:30-15:00 / 17:00-21:00 (저녁 OS 20:30)</b><br>함바그·오므라이스. 하카타에키마에 2-8-12 블로썸 하카타 2F.<br>안내마다 마감·주문 마감이 달라(지도 20:30 · 다른 안내 OS 20:00) 이른 저녁 추천.</div>
-      <div class="pick-warn">⚠️ 부정기 휴무 — 방문 전 확인.</div>
-    </div>
-    <div class="pick" data-meals="저녁">
-      <div class="pick-top"><div class="pick-name">모츠나베 니다이메 라쿠텐치<small>もつ鍋 二代目 楽天地</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%82%E3%81%A4%E9%8D%8B%20%E4%BA%8C%E4%BB%A3%E7%9B%AE%20%E6%A5%BD%E5%A4%A9%E5%9C%B0%20%E3%83%96%E3%83%AD%E3%83%83%E3%82%B5%E3%83%A0%E5%8D%9A%E5%A4%9A" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">저녁</span> <b>일~목 17:00-23:00 · 금~토 17:00-24:00</b><br>모츠나베(곱창전골). 블로썸 하카타 2F, 지도명 Hakata-2 BR, ☎092-483-7700.<br>곱창·마늘이 부담되면 돈카츠 등으로 바꿔도 돼요. 17~18시 방문이 안전.</div>
-      <div class="pick-warn">⚠️ 다른 공식 안내는 일~목 22:00 종료(L.O.21:30)로 표기 — 하카타에키마에 2초메점(2-5-23)과 혼동 금지.</div>
-    </div>
-  </div>
-  <div class="area-group"><div class="area-title">텐진·나카스</div>
-    <div class="pick" data-meals="점심 저녁">
-      <div class="pick-top"><div class="pick-name">원조 하카타 멘타이쥬<small>元祖博多めんたい重</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%85%83%E7%A5%96%E5%8D%9A%E5%A4%9A%E3%82%81%E3%82%93%E3%81%9F%E3%81%84%E9%87%8D%20%E4%B8%AD%E6%B4%B2" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">점심</span><span class="m">저녁</span> <b>7:00-22:30 (L.O.22:00)</b><br>명란 전문 — 명란밥·츠케멘. 니시나카스 6-15.<br>12/3 캐널시티 저녁에 가까워요(나카스). 수아가 명란을 좋아할지 몰라 가족 메뉴 확인 후.</div>
-      <div class="pick-warn">⚠️ 하카타역 도시락 전용 지점과 다른 곳.</div>
-    </div>
-    <div class="pick" data-meals="간식">
-      <div class="pick-top"><div class="pick-name">I&#x27;m donut? 후쿠오카점<small>I&#x27;m donut? 福岡</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=I%27m%20donut%3F%20%E7%A6%8F%E5%B2%A1%20%E6%B8%A1%E8%BE%BA%E9%80%9A" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">간식</span> <b>10:00-19:00 (지도·현지 디렉터리 기준)</b><br>도넛 간식. 와타나베도리 5-24-30.<br>줄이 길면 건너뛰기.</div>
-      <div class="pick-warn">⚠️ 부정기 휴무, 공식 운영일은 직접 확인 못 함. 별도 하카타 지점과 혼동 금지.</div>
-    </div>
-  </div>
-  <div class="area-group"><div class="area-title">그 밖</div>
-    <div class="pick" data-meals="점심 저녁">
-      <div class="pick-top"><div class="pick-name">야키니쿠노 바쿠로<small>焼肉の ばくろ</small></div><a class="pick-gm" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%84%BC%E8%82%89%E3%81%AE%20%E3%81%B0%E3%81%8F%E3%82%8D%20%E4%BD%8F%E5%90%89" target="_blank">📍 구글맵</a></div>
-      <div class="pick-meta"><span class="m">점심</span><span class="m">저녁</span> <b>점심 11:30~L.O.14:00 · 저녁 17:00~L.O.21:30</b><br>야키니쿠. 스미요시 1-1-9-202, 캐널시티 쪽.<br>공식 가족 손님 안내가 있어요. 아이에게는 생고기 대신 충분히 익힌 메뉴.</div>
-      <div class="pick-warn">⚠️ 부정기 휴무.</div>
-    </div>
-  </div>
-  <script>
-  (function () {
-    var fs = document.querySelectorAll('#filters button');
-    fs.forEach(function (b) { b.addEventListener('click', function () {
-      fs.forEach(function (x) { x.classList.toggle('on', x === b); });
-      var f = b.getAttribute('data-f');
-      document.querySelectorAll('.pick').forEach(function (c) {
-        c.hidden = !!f && (' ' + c.getAttribute('data-meals') + ' ').indexOf(' ' + f + ' ') < 0;
-      });
-      document.querySelectorAll('.area-group').forEach(function (g) {
-        g.hidden = !g.querySelector('.pick:not([hidden])');
-      });
-    }); });
-  })();
-  </script>
-
-  <p class="section-title" id="fasttrack">🛂 교통약자 패스트트랙 — 인천공항 출국 우대출구</p>
-  <div class="ft-card">
-    <div class="ft-head">인천공항 교통약자 출국 우대서비스(우대출구)
-      <small>공식: 교통약자/다자녀 가구 출국 우대서비스 · 운영기획팀 · 2026-11-27 확인 · <a href="https://www.airport.kr/ap_ko/908/subview.do" target="_blank" style="color:#e0e7ff;">공식 페이지</a></small></div>
-    <div class="ft-body">
-      <h5>우리 가족은?</h5>
-      <div class="ft-us"><b>수아(만 6세) = 유소아 대상</b> · 대상 기준 <b>만 7세 미만</b>, 증빙은 <b>여권</b>.<br>
-        <b>동반 최대 3인</b>까지 함께 이용 → 우리 가족 3명 모두 같이 이용 가능.<br>
-        <b>2터미널(T2)</b> 출입구: <b>3층 1D 또는 2A 출국장</b>의 교통약자 우대출구.</div>
-
-      <h5>출입구 위치</h5>
-      <table class="ft-tbl">
-        <tr><th>터미널</th><th>우대출구 위치(공식 안내도 기준)</th><th>출국장 번호</th></tr>
-        <tr class="me"><td>제2여객터미널 (T2) ◀ 우리</td><td><b>3층 1D, 2A 출국장</b> (안내도: "교통약자우대출구는 3층 1D, 2A 출국장입니다")</td><td>출국장 <b>1 (1D)</b> · <b>2 (2A)</b></td></tr>
-        <tr><td>제1여객터미널 (T1) · 참고</td><td>3층 2~5번 출국장 <b>측문</b> ("전용출구는 3층 2~5번 출국장 측문")</td><td>5·4·3·2 (측문)</td></tr>
-      </table>
-      <div class="src" style="margin:4px 0 0;">안내도 범례: A~N = 체크인 카운터, 출국장 1~2(T2)·1~6(T1), 면세지역/일반지역 구분. 공식 페이지에는 안내도 그림과 위 문구만 있고, 각 출국장 안에서의 더 자세한 위치 설명은 없어요. T2 층수(3층)는 안내도 설명문에만 나와요.</div>
-
-      <h5>이용 방법 (유소아 · 고령자)</h5>
-      <ol class="ft-steps">
-        <li><b>우대출구 입구에서 여권 제시</b></li>
-        <li><b>여권 스캔 및 대상자 인증</b></li>
-        <li><b>우대출구 이용</b> (동반 3인까지 함께)</li>
-      </ol>
-      <div class="src" style="margin:4px 0 0;">※ 공식 '임신부·유아·어린이 동반' 안내(airport.kr/ap_ko/949)에는 "체크인카운터에서 이용대상자임을 확인받고 <b>교통약자 우대카드</b>를 받아 전용 출국장 입구에서 여권과 함께 제시"라고 되어 있어 위 절차와 달라요. <b>체크인 때 항공사 직원에게 우대출구 이용 방법을 확인</b>하면 안전해요.</div>
-
-      <h5>운영시간 · 문의</h5>
-      <div>우대서비스 운영시간은 <b>"출국장 운영시간과 동일"</b>(별도 시간 없음).<br>
-        문의 <b>인천국제공항 고객센터 1577-2600</b> (07:00~22:00, 연중무휴) · 담당부서 운영기획팀.</div>
-
-      <h5>⚠️ 확인하지 못한 것 / 주의</h5>
-      <div class="warn-box" style="margin:0;"><strong>출국심사(법무부)까지 우대되는지</strong>, 우대출구가 보안검색 전용 통로인지는 공식 페이지에 <b>적혀 있지 않아요</b>(확인 못 함). <strong>수아가 11/29 전에 만 7세가 되면 대상이 아니에요</strong> — 여권 생년월일로 확인. 만 7세 미만 증빙은 <b>여권</b>이라 3명 모두 여권을 꼭 지참.</div>
-
-      <details>
-        <summary>다른 이용 대상 (참고)</summary>
-        <table class="ft-tbl">
-          <tr><th>구분</th><th>대상</th><th>증빙 · 방법</th></tr>
-          <tr class="me"><td>유소아</td><td>만 7세 미만</td><td>여권 · 입구에서 여권 스캔·인증</td></tr>
-          <tr><td>고령자</td><td>만 70세 이상</td><td>여권 · 입구에서 여권 스캔·인증</td></tr>
-          <tr><td>장애인</td><td>보행상 장애인(보건복지부 고시 '장애 등급 판정 기준')</td><td>장애인 복지카드 · 체크인 때 증빙 제시 후 교통약자 스티커 수령 → 입구에서 스티커 제시</td></tr>
-          <tr><td>임산부</td><td>임신 중인 산모</td><td>산모수첩 · 스티커 수령 방식 동일</td></tr>
-          <tr><td>항공사 병약승객</td><td>휠체어·항공침대·의료용 산소 등 항공사 의료서비스 이용 여객</td><td>항공사 직원 동행</td></tr>
-          <tr><td>사회적 기여자</td><td>법무부 출입국 우대카드 소지자</td><td>입구에서 출입국 우대카드 제시</td></tr>
-          <tr><td>다자녀 가구 ('25.6.10.~)</td><td>자녀 전원이 만 19세 미만인 3자녀 이상 가구 · 부모 1인 이상 + 자녀 1인 이상 함께 출국 · 가구당 동반 3인까지</td><td>여권 + 가족관계증명서 또는 주민등록등본(실물·전자증명서, 3개월 이내 발급분) · 입구에서 제시</td></tr>
-        </table>
-        <div class="src" style="margin:4px 0 0;">장애인·임산부는 동반 최대 3인 이용 가능. 출처: 인천국제공항공사 「교통약자/다자녀 가구 출국 우대서비스」 https://www.airport.kr/ap_ko/908/subview.do (2026-11-27 확인)</div>
-      </details>
-    </div>
-  </div>
-
-  <p class="section-title">✅ 출발 전 확인</p>
-  <div class="checklist">
-    <h4>예약·시간 확정</h4>
-    <div class="check-item">소닉 티켓 실제 출발 시각 (예약 11:50 vs 시각표 11:52)</div>
-    <div class="check-item">KE5488 귀국편 12월 시각표 확정 (잠정 15:50)</div>
-    <div class="check-item">11/29 인천 T2 교통약자 우대출구(3층 1D·2A) — 수아 여권 생년월일로 만 7세 미만 확인, 체크인 카운터에서 이용 가능 여부·절차 확인 (여권 3명 모두 지참)</div>
-    <div class="check-item">콜밴 기사님께 귀국 도착 시각 확정되면 알려드리기 (출발 11/29 05:30, 귀국 픽업 시각·장소)</div>
-    <div class="check-item">스기노이·하나벳푸 예약 플랜의 식사·시설 포함 범위 (수아 식사 포함)</div>
-    <div class="check-item">11/30(월) 스기노이 ↔ 벳푸역 셔틀 시각표 (벳푸역에 나갈 경우)</div>
-    <div class="check-item">이쿠라·I'm donut? 부정기 휴무</div>
-    <div class="check-item">엔화 현금 넉넉히 (일부 소규모 온천·동네 온천은 카드가 안 되는 곳이 있어요)</div>
-  </div>
-
-  <div class="checklist">
-    <h4>🎬 브이로그 준비 · 출국 전</h4>
-    <div class="check-item">구글 포토에 <b>여행 전용 공유 앨범 1개</b>(예: 2026 벳푸·후쿠오카) 만들고 두 분 폰 모두 <b>원본 화질 백업</b> 설정 — 원본은 구글 계정 저장공간을 차지하니 남은 용량 확인. 링크로 공유하면 <b>링크를 아는 사람은 누구나</b> 볼 수 있어요(위치정보 숨김 옵션도 확인).</div>
-    <div class="check-item">촬영 설정 통일: 가로(16:9), <b>FHD/4K 30fps 권장</b>. 4K 60fps는 용량이 약 2.4배(아이폰 HEVC 기준 분당 약 400MB, 구형 모델 기준 수치)라 슬로모션이 필요한 컷에만. 쇼츠용 세로 컷은 따로 최소한만.</div>
-    <div class="check-item">⚠️ <b>보조배터리 규정 변경(2026-04-20~)</b> · 1인 <b>2개까지</b>, 개당 <b>160Wh 이하</b>(100Wh 초과는 항공사 승인), <b>위탁 금지</b>, 기내 사용·충전 금지(2차 보도 기준 — 대한항공 공식 안내로 재확인). 예전 "100Wh 이하 5개"는 옛 기준이에요.</div>
-    <div class="check-item">충전기: 일본은 100V·2구 평판(A형) 콘센트라 <b>변환 플러그</b> 필요, 충전기 표기가 100-240V인지 확인. 촬영은 배터리를 많이 써서 폰 저장공간·충전기·보조배터리 점검.</div>
-    <div class="check-item">고가 카메라·짐벌 등을 가져가면 <b>출국 전 휴대품 반출 신고</b>(귀국 시 면세한도 US$800 초과 오해 방지, 2차 자료 기준 — 관세청 확인).</div>
-    <div class="check-item">스토리 질문 1줄 정하기 (예: "7살 수아의 첫 벳푸·후쿠오카, 가장 좋아한 순간은?")</div>
-  </div>
-  <div class="checklist">
-    <h4>🎬 브이로그 준비 · 여행 중 · 촬영 매너</h4>
-    <div class="check-item">장소마다 <b>5~15초 클립 4컷</b>: ① 이동·전환 ② 외관·간판 ③ 체험 ④ 리액션. 수아에게 폰을 맡겨 엄마·아빠 인터뷰도.</div>
-    <div class="check-item">매일 밤 10분 <b>베스트 5~8컷 하트</b> + 호텔 Wi-Fi로 공유 앨범에 올리기(백업 겸).</div>
-    <div class="check-item">🚫 <b>온천 탈의실·욕장 안 촬영은 절대 금지</b> — 폰은 사물함에. 스기노이 아쿠아가든(수영복 구역)은 매너를 지키면 폰 촬영 가능하다는 후기가 많지만 호텔 공식 규칙은 확인 못 함 → 방수 케이스·직원 확인.</div>
-    <div class="check-item">팀랩 포레스트(12/3): 사진·영상은 가능하지만 <b>플래시·삼각대·일각대·셀카봉 금지</b>, 상업 촬영 금지(판매 사이트 안내 기준 — 현장 안내 확인).</div>
-    <div class="check-item">여권·탑승권 QR·객실 호수·타인 얼굴(초상권)이 크게 찍히지 않게. 인천공항 보안구역에서는 직원 안내를 따르기.</div>
-    <div class="check-item">☀️ <b>일몰 시각</b>(황금빛 시간대): 벳푸 17:06 · 하카타 17:09~10 · 인천 17:16~17 — 12/3 후쿠오카타워 일몰샷은 16:30 전 도착 추천(오후 늦게 갤 가능성).</div>
-  </div>
-  <div class="checklist">
-    <h4>🎬 브이로그 준비 · 귀국 후</h4>
-    <div class="check-item">편집은 <b>벳푸편(DAY 1~3) · 후쿠오카편(DAY 4~6) 2편</b>(각 5~7분)으로, 유튜브는 <b>일부 공개</b>로. 일부 공개는 링크를 아는 사람 누구나 볼 수 있고 <b>유튜브는 원본 보관소가 아니라서</b> 원본은 구글 포토·외장 디스크에 따로 백업.</div>
-    <div class="check-item">쇼츠는 세로 3분 이하(2024-10-15 이후 기준). 영상 링크와 베스트 컷은 이 일정표 각 일차에 연결.</div>
-  </div>
-
-  <p class="section-title">📚 요금·운행 정보 출처</p>
-  <p class="src">오이타현 공식 2026 동계 국제선 다이아(KE2177) · 오이타공항 공식 접근 안내 · 스기노이 호텔 셔틀버스 공식 · 하나벳푸 올인클루시브 공식 · 미야코 호텔 하카타 FAQ · JR큐슈 소닉·넷 얼리버드 요금·역별 시각표 · 후쿠오카공항 접근·지하철 안내 · 다케가와라 온센 요금 · 에키마에 고토 온센·벳푸 타워 정보(안내마다 상이) · 닌텐도 후쿠오카·팀랩 포레스트·후쿠오카시 동식물원·후쿠오카 크리스마스 어드벤트 2026 · 인천공항 교통약자·다자녀 출국 우대서비스 공식 안내(2026-11-27 확인). 요금·운영 정보 2026-11-06 기준, 식당은 2026-11-07 구글 지도 공유 목록 '26년 일본여행'과 공식·현지 안내 기준.<br>
-  크리스마스 마켓(여행 기간 중 열림): 하카타역(11/7~12/25) · 텐진(11/14~12/26) · 텐진중앙공원(11/12~12/25) · 나카스(11/2~1/12) · 모모치(11/20~1/6).</p>
 
   <div class="footer">1차안 기준 · 일정이 바뀌면 이 페이지와 지도·쇼핑목록을 함께 갱신합니다</div>
 </div>

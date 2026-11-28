@@ -7,14 +7,18 @@
 
 | 파일 | 설명 |
 |------|------|
-| `fukuoka_family_trip.html` | 일정표 (6일, 하루 동선을 구글맵으로 여는 버튼, 맛집 후보 12곳, 출발 전 체크) |
+| `fukuoka_family_trip.html` | 일정표 (6일, 하루 동선을 구글맵으로 여는 버튼, 일차별 날씨, 상단 메뉴 버튼) |
+| `picks.html` | 맛집 후보 12곳(점심·저녁·간식 필터). 동선에 넣지 않고 당일에 고름 |
+| `fasttrack.html` | 인천공항 교통약자 패스트트랙(출국 우대출구) 안내 — T2 3층 1D·2A, 절차, 확인 못 한 점 |
+| `vlog.html` | 가족 브이로그 준비(출국 전·여행 중·촬영 매너·귀국 후) |
+| `checklist.html` | 출발 전 확인(예약·시간 확정)과 요금·운행 정보 출처 |
 | `map/map.html`, `map/locations.js` | 일정 지도 (Leaflet+OSM). 장소 데이터는 `locations.js` 한 곳. 주황 **맛집 후보** 탭 = day 7 |
 | `shopping.html`, `shopping.json`, `shopping-photos/` | 쇼핑목록(사진 포함). 항목은 `shopping.json`의 `items`에 추가 |
 | `fukuoka_google_mymaps.csv` | 구글 내 지도(My Maps) 가져오기용 (아래) |
 
 ## 🍽️ 맛집은 동선에 넣지 않는다
 사용자가 구글 지도 목록 '26년 일본여행'에 즐겨찾기한 12곳을 **후보로만** 제시하고 당일에 고른다. 일정표 타임라인에는 식사 자리표시("맛집 후보에서 고르기")만 있다. 호텔 조식·스기노이 석식(11/29~30)·하나벳푸 석식(12/1)은 숙박 포함 범위가 기준.
-후보를 바꾸려면 데이터 원본 한 곳(`locations.js`의 `pick_*` 항목)과 일정표의 후보 카드를 함께 고친다.
+후보를 바꾸려면 데이터 원본 한 곳(`locations.js`의 `pick_*` 항목)과 `picks.html`의 후보 카드를 함께 고친다.
 
 ## 🛍️ 쇼핑목록 추가
 화면 입력칸에서 적은 항목(사진은 항목의 「📷 사진 추가」로 올리면 480px로 줄여 `…/checklist/fukuoka/photos`에 저장, 「🔍 이미지 검색」은 구글 이미지 검색 열기)과 체크 표시는 taean-camping과 같은 Firebase Realtime Database(`…/checklist/fukuoka`, REST 폴링 5초)에 저장돼 **가족 모두에게 공유**된다(✕ 삭제도 공유). 오프라인 등으로 못 올린 항목은 그 기기에 임시로 두었다가 연결되면 자동 업로드. 사진·가격이 필요한 항목은 `shopping.json`의 `items`에 `{ "id": "…", "name": "…", "photo": "shopping-photos/…jpg", … }`로 추가(`name`만 필수). 사진은 올리기 전에 위치·촬영정보를 지우고 가로 820px 안팎으로 줄인다.
