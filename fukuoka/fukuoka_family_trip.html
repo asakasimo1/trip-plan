@@ -130,8 +130,8 @@
   /* 체크리스트 */
   .checklist { background: white; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); margin-bottom: 16px; }
   .checklist h4 { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
-  .check-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; font-size: 12.5px; color: #374151; line-height: 1.5; }
-  .check-item::before { content: "□"; color: #94a3b8; flex-shrink: 0; font-size: 14px; line-height: 1.3; }
+  .check-item { position: relative; padding-left: 24px; margin-bottom: 10px; font-size: 13.5px; color: #374151; line-height: 1.7; word-break: keep-all; overflow-wrap: break-word; }
+  .check-item::before { content: "□"; position: absolute; left: 0; top: 0; color: #94a3b8; font-size: 16px; line-height: 1.5; }
 
   /* 지도 섹션 */
   .map-wrap { border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.1); margin-bottom: 16px; background: linear-gradient(135deg,#1e3a5f,#2563eb); }
@@ -190,7 +190,7 @@
   .driver-form button { border: 0; border-radius: 8px; padding: 8px 14px; font-weight: 800; font-size: 13px; color: white; background: #4f46e5; cursor: pointer; font-family: inherit; }
   .driver-hint { font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.5; }
   .driver-reset { border: 0; background: none; color: #94a3b8; font-size: 11px; text-decoration: underline; cursor: pointer; margin-left: 8px; font-family: inherit; }
-  .nav-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+  .nav-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 8px; margin-bottom: 18px; padding-bottom: 4px; }
   .route-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 16px 10px; }
   .route-row a { font-size: 12px; font-weight: 700; color: #1d4ed8; background: #eff6ff; border-radius: 20px; padding: 5px 12px; text-decoration: none; }
   .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -206,7 +206,10 @@
   .pick-meta b { color: #334155; }
   .pick-warn { font-size: 11.5px; color: #b91c1c; background: #fef2f2; border-radius: 6px; padding: 4px 8px; margin-top: 6px; line-height: 1.5; }
   .m { display: inline-block; font-size: 10.5px; font-weight: 700; border-radius: 6px; padding: 1px 7px; margin-right: 4px; background: #f1f5f9; color: #475569; }
-  .nav-row a { flex: 1; text-align: center; background: white; color: #1e3a5f; font-size: 13px; font-weight: 800; border-radius: 12px; padding: 11px 6px; text-decoration: none; box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+  .nav-row a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 66px; padding: 9px 4px 8px; border-radius: 14px; color: #fff; text-decoration: none; text-align: center; font-weight: 800; background: linear-gradient(160deg, var(--c1), var(--c2)); box-shadow: 0 4px 0 var(--c1), 0 6px 10px rgba(15,23,42,.18); transition: transform .08s, box-shadow .08s; -webkit-tap-highlight-color: transparent; }
+  .nav-row a:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--c1), 0 2px 4px rgba(15,23,42,.18); }
+  .nav-row .ni { font-size: 24px; line-height: 1; }
+  .nav-row .nt { font-size: 13.5px; line-height: 1.2; letter-spacing: -.2px; text-shadow: 0 1px 1px rgba(0,0,0,.25); word-break: keep-all; }
 </style>
 <link rel="icon" type="image/png" href="/trip-plan/icons/icon-192-v2.png">
 <link rel="manifest" href="/trip-plan/manifest.webmanifest">
@@ -233,12 +236,12 @@
 <div class="container">
 
   <div class="nav-row">
-    <a href="map/gmap.html">🗺️ 구글 지도</a>
-    <a href="picks.html">🍽️ 맛집 후보</a>
-    <a href="shopping.html">🛍️ 쇼핑목록</a>
-    <a href="fasttrack.html">🛂 패스트트랙</a>
-    <a href="vlog.html">🎬 브이로그</a>
-    <a href="checklist.html">✅ 출발 전 확인</a>
+    <a href="map/gmap.html" style="--c1:#1d4ed8;--c2:#2563eb;"><span class="ni">🗺️</span><span class="nt">구글 지도</span></a>
+    <a href="picks.html" style="--c1:#c2410c;--c2:#ea580c;"><span class="ni">🍽️</span><span class="nt">맛집 후보</span></a>
+    <a href="shopping.html" style="--c1:#047857;--c2:#059669;"><span class="ni">🛍️</span><span class="nt">쇼핑목록</span></a>
+    <a href="fasttrack.html" style="--c1:#4338ca;--c2:#4f46e5;"><span class="ni">🛂</span><span class="nt">패스트트랙</span></a>
+    <a href="vlog.html" style="--c1:#be185d;--c2:#db2777;"><span class="ni">🎬</span><span class="nt">브이로그</span></a>
+    <a href="checklist.html" style="--c1:#0f766e;--c2:#0d9488;"><span class="ni">✅</span><span class="nt">출발 전 확인</span></a>
   </div>
 
   <div class="driver-box" id="driver">
